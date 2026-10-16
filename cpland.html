@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPland · Servidor MC Java</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e4e8df; --panel:#f5f7f1; --ink:#1c2a1d; --muted:#4f5f50;
+  --grass:#4f8a2b; --grass-d:#2f5f17; --dirt:#8a5a34; --line:#1c2a1d;
+  --list:#1b1b1b; --list-ink:#f2f2f2; --list-muted:#a8a8a8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121a14; --panel:#1b261d; --ink:#e8efe3; --muted:#a3b3a2;
+    --grass:#6cb43a; --grass-d:#3f7a1f; --dirt:#a9794d; --line:#000;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121a14; --panel:#1b261d; --ink:#e8efe3; --muted:#a3b3a2;
+  --grass:#6cb43a; --grass-d:#3f7a1f; --dirt:#a9794d; --line:#000;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+h1,h2,.px{font-family:"Press Start 2P","Courier New",monospace;font-weight:400}
+header{padding:56px 0 8px}
+h1{font-size:clamp(34px,9vw,64px);line-height:1.1;margin:0 0 14px;letter-spacing:-1px;text-shadow:4px 4px 0 var(--grass)}
+.sub{margin:0 0 32px;color:var(--muted);max-width:52ch;font-size:19px}
+
+/* Entrada de lista de servidores */
+.entry{display:flex;gap:18px;align-items:center;background:var(--list);color:var(--list-ink);border:4px solid var(--line);padding:16px;box-shadow:8px 8px 0 var(--grass-d)}
+.entry svg{width:72px;height:72px;flex:none;image-rendering:pixelated}
+.entry .info{flex:1;min-width:0}
+.entry .name{font-family:"Press Start 2P",monospace;font-size:16px;margin:0 0 8px}
+.entry .ip{font-family:"Press Start 2P",monospace;font-size:11px;color:#5dff5d;word-break:break-all;margin:0 0 6px;line-height:1.6}
+.entry .meta{color:var(--list-muted);font-size:15px;margin:0}
+.btn{font-family:"Press Start 2P",monospace;font-size:11px;cursor:pointer;border:3px solid var(--line);background:var(--grass);color:#fff;padding:14px 16px;box-shadow:inset -4px -4px 0 var(--grass-d),inset 4px 4px 0 rgba(255,255,255,.3);text-decoration:none;display:inline-block;line-height:1.4}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(2px)}
+.btn:focus-visible,a:focus-visible{outline:3px solid #ffd23f;outline-offset:3px}
+.btn.dirt{background:var(--dirt);box-shadow:inset -4px -4px 0 rgba(0,0,0,.3),inset 4px 4px 0 rgba(255,255,255,.2)}
+
+section{padding:48px 0 0}
+h2{font-size:18px;line-height:1.5;margin:0 0 22px}
+ol{list-style:none;margin:0;padding:0;counter-reset:s}
+li.step{counter-increment:s;position:relative;background:var(--panel);border:3px solid var(--line);padding:16px 18px 16px 70px;margin-bottom:14px}
+li.step::before{content:counter(s);position:absolute;left:14px;top:14px;width:40px;height:40px;background:var(--dirt);color:#fff;border:3px solid var(--line);display:grid;place-items:center;font-family:"Press Start 2P",monospace;font-size:14px}
+li.step b{display:block;font-size:18px}
+li.step span{color:var(--muted)}
+code{background:rgba(0,0,0,.12);padding:1px 7px;font-size:.92em}
+.mods{background:var(--panel);border:3px solid var(--line);padding:24px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.mods p{margin:0;max-width:44ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:0;padding:0;list-style:none}
+.facts li{background:var(--panel);border:3px solid var(--line);padding:14px 16px}
+.facts small{display:block;color:var(--muted)}
+.facts strong{font-size:19px}
+.tuto{width:100%;display:block;border:4px solid var(--line);box-shadow:8px 8px 0 var(--grass-d);background:#000}
+.pine{background:var(--grass);color:#fff;border:4px solid var(--line);box-shadow:8px 8px 0 var(--grass-d);padding:28px 24px;position:relative}
+.pine h2{font-size:clamp(16px,4.6vw,24px);margin:12px 0 14px;text-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.pine p{margin:0 0 22px;max-width:52ch;font-size:18px}
+.pine .tag{display:inline-block;background:#ffd23f;color:#1c2a1d;border:3px solid var(--line);font-family:"Press Start 2P",monospace;font-size:11px;padding:8px 10px}
+.btn.big{background:#ffd23f;color:#1c2a1d;font-size:13px;padding:18px 22px;box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),inset 4px 4px 0 rgba(255,255,255,.5)}
+@media (max-width:560px){.btn.big{display:block;text-align:center}}
+.sug{background:var(--panel);border:3px solid var(--line);padding:22px;display:grid;gap:14px}
+.sug[hidden]{display:none}
+.sug label{font-weight:800;display:grid;gap:6px}
+.sug input,.sug textarea{font:inherit;color:var(--ink);background:var(--bg);border:3px solid var(--line);padding:12px;width:100%}
+.sug textarea{min-height:130px;resize:vertical}
+.sug input:focus-visible,.sug textarea:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
+.sug .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.sug button{justify-self:start}
+.sug button:disabled{opacity:.6;cursor:wait}
+.sug .res{margin:0;min-height:1.4em;font-weight:800}
+.sug .res.ok{color:var(--grass-d)}
+.sug .res.err{color:#c0392b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sug .res.ok{color:#8be04e}}
+.topsug{display:flex;flex-wrap:wrap;gap:12px}
+.st{background:var(--panel);border:3px solid var(--line);padding:20px;display:grid;gap:14px}
+.st[hidden]{display:none}
+.st .line{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;margin:0}
+.st .dot{width:14px;height:14px;background:#888;flex:none}
+.st .on .dot,.st .line.on .dot{background:#3fbf3f}
+.st .line.off .dot{background:#e04848}
+.st h3{font-family:"Press Start 2P",monospace;font-weight:400;font-size:12px;margin:6px 0 0;line-height:1.5}
+.plist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.plist li{display:flex;align-items:center;gap:12px;background:var(--bg);border:3px solid var(--line);padding:10px 14px;font-weight:800;word-break:break-all}
+.plist li small{display:block;font-weight:400;color:var(--muted)}
+.plist img{width:32px;height:32px;image-rendering:pixelated;flex:none;background:var(--dirt)}
+.plist.offl li{opacity:.7}
+.plist.offl img{filter:grayscale(1)}
+.pnote{margin:0;color:var(--muted)}
+.pnote[hidden]{display:none}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+section{scroll-margin-top:76px}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;gap:6px;align-items:center;overflow-x:auto;background:var(--bg);border-bottom:3px solid var(--line);padding:10px 0;margin:0 -20px;padding-left:20px;padding-right:20px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a,.nav .tbtn{flex:none;font-weight:800;font-size:15px;color:var(--ink);text-decoration:none;padding:9px 14px;border:3px solid transparent;background:none;cursor:pointer;font-family:inherit;min-height:44px;display:inline-flex;align-items:center}
+.nav a:hover,.nav .tbtn:hover{border-color:var(--line);background:var(--panel)}
+.nav .tbtn{margin-left:auto;border-color:var(--line)}
+.pill{display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:15px;font-weight:800}
+.pill .dot{width:12px;height:12px;background:#888;flex:none}
+.pill.on .dot{background:#5dff5d}.pill.off .dot{background:#ff5555}
+.faq details{background:var(--panel);border:3px solid var(--line);margin-bottom:12px}
+.faq summary{cursor:pointer;font-weight:800;padding:14px 18px;list-style:none;display:flex;justify-content:space-between;gap:12px;min-height:48px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:"Press Start 2P",monospace;font-size:14px;color:var(--grass)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{margin:0;padding:0 18px 16px;color:var(--muted)}
+.up{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:48px;height:48px;padding:0;display:grid;place-items:center;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:15}
+.up.show{opacity:1;pointer-events:auto}
+.btn,.plist li,.facts li,li.step{transition:transform .12s,filter .12s}
+.facts li:hover,li.step:hover{transform:translateY(-2px)}
+.btn{min-height:44px}
+footer{padding:56px 0 40px;color:var(--muted);font-size:15px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--grass-d);color:#fff;border:3px solid var(--line);padding:12px 16px;font-family:"Press Start 2P",monospace;font-size:11px;transition:transform .25s}
+.toast.on{transform:translate(-50%,0)}
+@media (max-width:560px){
+  .entry{flex-wrap:wrap}
+  .entry .btn{width:100%;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav" aria-label="Secciones">
+    <a href="#descargar">Descargar</a><a href="#como">Cómo entrar</a><a href="#estado">Estado</a><a href="#faq">Ayuda</a><a href="#sugerencias">Sugerencias</a>
+    <button type="button" class="tbtn" id="themeBtn" aria-label="Cambiar entre tema claro y oscuro">Tema</button>
+  </nav>
+  <header>
+    <h1>CPland</h1>
+    <p class="sub">Servidor de Minecraft Java con mods en Fabric. Instala el pack, copia la IP y entra a jugar.</p>
+
+    <div class="entry">
+      <svg viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true">
+        <rect width="8" height="8" fill="#8a5a34"/>
+        <rect width="8" height="2" fill="#5aa02c"/>
+        <rect x="1" y="2" width="1" height="1" fill="#5aa02c"/><rect x="5" y="2" width="2" height="1" fill="#5aa02c"/>
+        <rect x="1" y="4" width="2" height="1" fill="#6d4526"/><rect x="5" y="5" width="2" height="1" fill="#6d4526"/>
+        <rect x="3" y="6" width="1" height="1" fill="#a67348"/><rect x="0" y="7" width="2" height="1" fill="#6d4526"/>
+        <rect x="4" y="3" width="1" height="1" fill="#a67348"/>
+      </svg>
+      <div class="info">
+        <p class="name">CPland</p>
+        <p class="ip" id="ip">rails-complies.tun.ply.gg</p>
+        <p class="meta">Java 1.21.1 · Fabric · Requiere mods</p>
+        <p class="pill" id="pill" aria-live="polite"><span class="dot"></span><span id="pillTxt">Comprobando...</span></p>
+      </div>
+      <button class="btn" id="copy" type="button">Copiar IP</button>
+    </div>
+    <p class="topsug" style="margin:22px 0 0"><button class="btn" id="stOpenTop" type="button">Ver estado</button><button class="btn dirt" id="sugOpenTop" type="button">Enviar sugerencia</button></p>
+  </header>
+
+
+  <section>
+    <h2>Mods</h2>
+    <div class="mods">
+      <p>Mecesitas este mod para poder jugar al servidor.</p>
+      <a class="btn dirt" href="https://fuckingfast.net/1yh3fbtj1xe8" target="_blank" rel="noopener">Descargar</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Video tutorial</h2>
+    <video class="tuto" controls preload="metadata" playsinline>
+      <source src="tutorial.mp4" type="video/mp4">
+      Tu navegador no puede reproducir este video.
+    </video>
+  </section>
+
+  <section id="como">
+    <h2>Cómo entrar</h2>
+    <ol>
+      <li class="step"><b>Instala Fabric 1.21.1</b><span>Descarga el instalador desde <a href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener">fabricmc.net</a> y crea el perfil para Minecraft Java 1.21.1.</span></li>
+      <li class="step"><b>Descarga los mods</b><span>Baja el pack desde el botón de arriba y pon los archivos <code>.jar</code> en la carpeta <code>.minecraft/mods</code>.</span></li>
+      <li class="step"><b>Abre Minecraft con Fabric</b><span>Elige el perfil de Fabric en el launcher y pulsa Jugar.</span></li>
+      <li class="step"><b>Añade el servidor</b><span>En Multijugador, pulsa Añadir servidor y pega <code>rails-complies.tun.ply.gg</code>.</span></li>
+    </ol>
+  </section>
+
+  <section id="estado">
+    <h2>Estado del servidor</h2>
+    <button class="btn" id="stToggle" type="button" aria-expanded="false" aria-controls="stPanel">Ver estado y jugadores</button>
+    <div class="st" id="stPanel" hidden style="margin-top:18px" aria-live="polite">
+      <p class="line" id="stLine"><span class="dot"></span><span id="stTxt">Comprobando...</span></p>
+      <h3>Conectados ahora</h3>
+      <ul class="plist" id="stOn"></ul>
+      <p class="pnote" id="stOnNote" hidden></p>
+      <h3>Vistos recientemente (desconectados)</h3>
+      <ul class="plist offl" id="stOff"></ul>
+      <p class="pnote" id="stOffNote">Aún no hay jugadores registrados.</p>
+      <p class="pnote" style="font-size:14px">La lista de desconectados solo incluye jugadores que esta página vio conectados en este navegador. El servidor no entrega una lista de quién está desconectado.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Datos del servidor</h2>
+    <ul class="facts">
+      <li><small>Edición</small><strong>Java</strong></li>
+      <li><small>Versión</small><strong>1.21.1</strong></li>
+      <li><small>Cargador de mods</small><strong>Fabric</strong></li>
+      <li><small>IP</small><strong>rails-complies.tun.ply.gg</strong></li>
+    </ul>
+  </section>
+
+    <section id="faq" class="faq">
+    <h2>Ayuda rápida</h2>
+    <details><summary>No puedo conectarme al servidor</summary><p>Comprueba que usas Minecraft Java 1.21.1 con Fabric, que tienes los mismos mods que el servidor y que escribiste bien la IP: <code>rails-complies.tun.ply.gg</code>. Revisa arriba si el servidor está en línea.</p></details>
+    <details><summary>¿Qué versión de Java necesito?</summary><p>Minecraft 1.21.1 necesita Java 21. Los launchers modernos, como Prism, lo instalan o lo piden automáticamente.</p></details>
+    <details><summary>Me dice que faltan o sobran mods</summary><p>Borra todo lo que haya en tu carpeta <code>mods</code> y vuelve a copiar los <code>.jar</code> del pack. Tienen que ser exactamente los mismos que usa el servidor.</p></details>
+    <details><summary>El juego se cierra al abrir</summary><p>Casi siempre es un mod que no corresponde a 1.21.1 o que falta. Reinstala el pack completo y abre el juego con el perfil de Fabric.</p></details>
+  </section>
+
+  <section id="sugerencias">
+    <h2>Sugerencias</h2>
+    <button class="btn dirt" id="sugToggle" type="button" aria-expanded="false" aria-controls="sugForm">Abrir sugerencias</button>
+    <form class="sug" id="sugForm" novalidate hidden style="margin-top:18px">
+      <label>Tu nombre o usuario de Minecraft (opcional)
+        <input type="text" name="nombre" maxlength="60" autocomplete="nickname">
+      </label>
+      <label>Tu sugerencia
+        <textarea name="mensaje" maxlength="1500" required placeholder="Cuéntanos qué mods, cambios o ideas te gustaría ver en CPland"></textarea>
+      </label>
+      <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit" id="sugBtn">Enviar sugerencia</button>
+      <p class="res" id="sugRes" role="status"></p>
+    </form>
+  </section>
+
+  <footer>CPland · By PapaCalvo.</footer>
+<button class="btn up" id="up" type="button" aria-label="Volver arriba">&#9650;</button>
+</div>
+<div class="toast" id="toast" role="status">IP copiada</div>
+<script>
+(function(){
+  var ip="rails-complies.tun.ply.gg",btn=document.getElementById("copy"),t=document.getElementById("toast");
+  function done(ok){
+    t.textContent=ok?"IP copiada":"Copia la IP a mano";
+    t.classList.add("on");setTimeout(function(){t.classList.remove("on")},1800);
+  }
+  btn.addEventListener("click",function(){
+    try{
+      navigator.clipboard.writeText(ip).then(function(){done(true)},fallback);
+    }catch(e){fallback()}
+  });
+  function fallback(){
+    try{
+      var r=document.createRange();r.selectNodeContents(document.getElementById("ip"));
+      var s=getSelection();s.removeAllRanges();s.addRange(r);
+      done(document.execCommand("copy"));
+    }catch(e){done(false)}
+  }
+})();
+(function(){
+  var ip="rails-complies.tun.ply.gg",KEY="cpland_seen";
+  var tg=document.getElementById("stToggle"),topb=document.getElementById("stOpenTop"),panel=document.getElementById("stPanel");
+  var line=document.getElementById("stLine"),txt=document.getElementById("stTxt");
+  var ulOn=document.getElementById("stOn"),noteOn=document.getElementById("stOnNote");
+  var ulOff=document.getElementById("stOff"),noteOff=document.getElementById("stOffNote");
+  var timer=null,pill=document.getElementById("pill"),pillTxt=document.getElementById("pillTxt");
+  function loadSeen(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return {}}}
+  function saveSeen(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function ago(ts){
+    var m=Math.round((Date.now()-ts)/60000);
+    if(m<2)return "hace un momento";
+    if(m<60)return "hace "+m+" min";
+    var h=Math.round(m/60);
+    if(h<24)return "hace "+h+" h";
+    return "hace "+Math.round(h/24)+" d";
+  }
+  function head(n){var i=new Image();i.alt="";i.width=32;i.height=32;i.src="https://mc-heads.net/avatar/"+encodeURIComponent(n)+"/32";i.onerror=function(){i.style.visibility="hidden"};return i}
+  function fill(ul,items){
+    ul.innerHTML="";
+    items.forEach(function(it){
+      var li=document.createElement("li"),d=document.createElement("div");
+      d.appendChild(document.createTextNode(it.name));
+      if(it.sub){var sm=document.createElement("small");sm.textContent=it.sub;d.appendChild(sm)}
+      li.appendChild(head(it.name));li.appendChild(d);ul.appendChild(li);
+    });
+  }
+  function render(online,n,m,names){
+    pill.className="pill "+(online?"on":"off");
+    pillTxt.textContent=online?"En línea · "+n+" / "+m+(n===1?" jugador":" jugadores"):"Servidor apagado";
+    line.className="line "+(online?"on":"off");
+    var seen=loadSeen(),now=Date.now();
+    if(!online){
+      txt.textContent="Servidor apagado";
+      fill(ulOn,[]);noteOn.textContent="El servidor está apagado en este momento.";noteOn.hidden=false;
+    }else{
+      txt.textContent="En línea · "+n+" / "+m+(n===1?" jugador":" jugadores");
+      names.forEach(function(x){seen[x]=now});
+      saveSeen(seen);
+      fill(ulOn,names.map(function(x){return {name:x}}));
+      if(names.length){noteOn.hidden=true}
+      else{noteOn.textContent=n===0?"No hay nadie conectado ahora.":"Hay "+n+" conectado"+(n===1?"":"s")+", pero el servidor no comparte los nombres.";noteOn.hidden=false}
+    }
+    var cur={};names.forEach(function(x){cur[x]=1});
+    var off=Object.keys(seen).filter(function(x){return !cur[x]}).sort(function(a,b){return seen[b]-seen[a]}).slice(0,12)
+      .map(function(x){return {name:x,sub:ago(seen[x])}});
+    fill(ulOff,off);
+    noteOff.hidden=off.length>0;
+  }
+  function get(url,pick){
+    return fetch(url).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+      if(d&&d.online)return {online:true,n:d.players.online,m:d.players.max,names:(d.players.list||[]).map(pick)};
+      return {online:false};
+    });
+  }
+  function check(){
+    get("https://api.mcstatus.io/v2/status/java/"+ip,function(p){return p.name_clean})
+    .catch(function(){return get("https://api.mcsrvstat.us/3/"+ip,function(p){return p.name})})
+    .then(function(r){render(r.online,r.n,r.m,r.names||[])})
+    .catch(function(){line.className="line";pill.className="pill";pillTxt.textContent="Estado no disponible";txt.textContent="No se pudo comprobar el estado. Abre la página en tu navegador."});
+  }
+  function setOpen(o){
+    panel.hidden=!o;
+    tg.textContent=o?"Ocultar estado":"Ver estado y jugadores";
+    tg.setAttribute("aria-expanded",o?"true":"false");
+    if(o)check();
+  }
+  tg.addEventListener("click",function(){setOpen(panel.hidden)});
+  check();timer=setInterval(check,60000);
+  topb.addEventListener("click",function(){
+    if(panel.hidden)setOpen(true);
+    document.getElementById("estado").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+})();
+(function(){
+  var form=document.getElementById("sugForm"),tg=document.getElementById("sugToggle"),top=document.getElementById("sugOpenTop");
+  function setOpen(o){
+    form.hidden=!o;
+    tg.textContent=o?"Cerrar sugerencias":"Abrir sugerencias";
+    tg.setAttribute("aria-expanded",o?"true":"false");
+  }
+  tg.addEventListener("click",function(){setOpen(form.hidden)});
+  top.addEventListener("click",function(){
+    setOpen(true);
+    document.getElementById("sugerencias").scrollIntoView({behavior:"smooth",block:"start"});
+    setTimeout(function(){try{form.mensaje.focus({preventScroll:true})}catch(e){}},500);
+  });
+})();
+(function(){
+  var f=document.getElementById("sugForm"),btn=document.getElementById("sugBtn"),res=document.getElementById("sugRes");
+  function say(t,c){res.textContent=t;res.className="res "+(c||"")}
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    var msg=f.mensaje.value.trim();
+    if(msg.length<5){say("Escribe tu sugerencia antes de enviar.","err");return}
+    if(f._honey.value){return}
+    btn.disabled=true;say("Enviando...");
+    fetch("https://formsubmit.co/ajax/migueld.tineo@gmail.com",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({
+        nombre:f.nombre.value.trim()||"Anónimo",
+        mensaje:msg,
+        _subject:"Nueva sugerencia para CPland",
+        _template:"table"
+      })
+    }).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})})
+    .then(function(x){
+      if(x.ok&&String(x.d.success)!=="false"){f.reset();say("¡Gracias! Tu sugerencia fue enviada.","ok")}
+      else say("No se pudo enviar: "+((x.d&&x.d.message)||"inténtalo más tarde")+"","err");
+    })
+    .catch(function(){say("No se pudo enviar. Revisa tu conexión.","err")})
+    .then(function(){btn.disabled=false});
+  });
+})();
+(function(){
+  var up=document.getElementById("up"),th=document.getElementById("themeBtn"),root=document.documentElement;
+  window.addEventListener("scroll",function(){up.classList.toggle("show",window.scrollY>500)},{passive:true});
+  up.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});
+  function dark(){var a=root.getAttribute("data-theme");return a?a==="dark":matchMedia("(prefers-color-scheme: dark)").matches}
+  try{var sv=localStorage.getItem("cpland_theme");if(sv)root.setAttribute("data-theme",sv)}catch(e){}
+  th.addEventListener("click",function(){
+    var n=dark()?"light":"dark";root.setAttribute("data-theme",n);
+    try{localStorage.setItem("cpland_theme",n)}catch(e){}
+  });
+  [["#estado","stOpenTop"],["#sugerencias","sugOpenTop"]].forEach(function(p){
+    document.querySelector('.nav a[href="'+p[0]+'"]').addEventListener("click",function(e){
+      e.preventDefault();document.getElementById(p[1]).click();
+    });
+  });
+})();
+</script>
+</body>
+</html>

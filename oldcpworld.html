@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CP WORLD</title>
+    <style>
+        body { 
+            background-color: #1a1a1a; 
+            color: #cccccc; 
+            font-family: "Times New Roman", Times, serif; 
+            margin: 20px;
+            line-height: 1.2;
+        }
+        h1 { color: #ffffff; text-decoration: underline; }
+        h2 { color: #ffffff; background-color: #333; padding: 2px; }
+        
+        a { color: #00eaff; } 
+        a:visited { color: #00aacc; }
+        
+        nav { margin-bottom: 20px; border: 1px solid #444; padding: 10px; }
+        .page { display: none; }
+        .active { display: block; }
+        
+        hr { border: 0; border-top: 2px solid #444; }
+        ul { list-style-type: disc; }
+        li { margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <center>
+        <h1>CP WORLD</h1>
+        <p><i></i></p>
+    </center>
+
+    <nav>
+
+        <b>MENU:</b> 
+        [<a href="#" onclick="nav('home')">Inicio</a>] 
+        [<a href="#" onclick="nav('juegos')">Juegos</a>] 
+        [<a href="#" onclick="nav('soft')">Software</a>]  
+        [<a href="#" onclick="nav('multi')">Multimedia</a>]
+        [<a href="#" onclick="nav('android')">Android</a>]
+        [<a href="#" onclick="nav('cyber')">Cyber/OSINT</a>] 
+        [<a href="#" onclick="nav('otros')">Otros</a>]
+        [<a href="https://t.me/lostineo/1" target="_blank">Telegram</a>]
+
+<input type="text" id="buscador" onkeyup="filtrarTodo()" placeholder="Buscar" 
+style="width: 80%; padding: 8px; margin-top: 10px; background: #222; color: #ffffff; border: 1px solid #444;">
+
+    </nav>
+
+    <hr>
+
+    <div id="home" class="page active">
+        </ul>
+        <p></p>
+    </div>
+
+    <div id="juegos" class="page">
+        <h2>JUEGOS PC</h2>
+        <ul>
+            <h3>Juegos Linux</h3>
+            <li><a href="https://freelinuxpcgames.com/">Free Linux PC Games</a> - Juegos nativos de Linux (PIRATA).</li>
+            <li><a href="https://portablelinuxgames.org/">Portable Linux Games</a> - Juegos portables para Linux.</li>
+            <li><a href="https://juegos.locosporlinux.com/">Juegos Locos por Linux</a> - Juegos nativos de Linux Online.</li>
+            <h3>Juegos Windows</h3>
+            <li><a href="https://gog-games.to/">GOG Games</a> - Juegos de GOG.</li>
+            <li><a href="https://steamrip.com/">SteamRIP</a> - Juegos portables.</li>
+            <li><a href="https://steamunlocked.org/">SteamUnlocked</a> - Juegos portables.</li>
+            <li><a href="https://pivigames.blog/">PiviGames</a> - Juegos en español.</li>
+            <li><a href="https://dodi-repacks.site/">DODI Repacks</a> - Juegos supercomprimidos.</li>
+            <li><a href="https://fitgirl-repacks.site/">FitGirl Repacks</a> - Juegos supercomprimidos (instalación lenta).</li>
+            <li><a href="https://optijuegos.net/">OptiJuegos</a> - Juegos optimizados.</li>
+            <h3>Emulación</h3>
+            <li><a href="https://romsfun.com/">RomsFun</a> - Roms.</li>
+            <h2>Minecraft</h2>
+            <h3>Java</h3>
+            <li><a href="https://elyprismlauncher.github.io/">ElyPride Launcher</a> - Launcher no oficial de Minecraft Java.</li>
+            <h5><li><a href="https://mega.nz/file/JjgnySST#f5R_xEdQLwRyZnmRK3kmgiUy0MW51R25UAONdQqCCgE">Pack de addons</a></li></h5>
+            <li><a href="https://tlauncher.org/">TLauncher</a> - Launcher no oficial de Minecraft Java.</li>
+            <h3>Bedrock</h3>
+            <li><a href="https://github.com/PlaGaPlusDev/CianovaLauncher-mcpelauncher">CianovaLauncher-mcpelauncher</a> - Launcher no oficial de Minecraft Bedrock.</li>
+            <li><a href="https://mcpelife.com/">MCPeLife</a> - APKS de Minecraft Bedrock.</li>
+            <h2>Lutris</h2>
+            <li><a href="https://lutris.net/">Lutris</a> - Gestor de juegos para Linux.</li>
+            <h3>Configuracion de lutris</h3>
+            Wine recomendado: WineHQ Staging.
+            <h2>Configuracion para graficas sin vulkan</h2>
+            <img src="https://i.ibb.co/VYm19CBB/image.png">
+            <img src="https://i.ibb.co/yBfFmJPK/image.png"> 
+        </ul>
+    </div>
+
+<div id="otros" class="page">
+        <h2>OTROS</h2>
+        <ul>
+            <li><a href="https://down-cs.su/">Counter-Strike Non Steam</a> - Counter-Strike Non Steam.</li>
+            <li><a href="https://www.youtube.com/watch?v=uZYnBIMcGrI">Instalar Windows sin pendrive</a> - Método para instalar Windows sin USB.</li>
+            <li><a href="https://inmanga.com/">InManga</a> - Manga Online.</li>
+            <li><a href="https://wallhaven.cc/">Wallhaven</a> - Fondos de pantalla de alta calidad.</li>
+            <li><a href="https://ublockorigin.com/">uBlock Origin</a> - Bloqueador de anuncios gratuito y de código abierto.</li>
+            <li><a href="https://one.one.one.one/">Cloudflare DNS 1.1.1.1</a> - DNS público de Cloudflare con enfoque en privacidad.</li>
+            <li><a href="https://abdownloadmanager.com/">AB Download Manager</a> - Gestor de descargas gratuito y de código abierto.</li>
+            <li><a href="https://temp-mail.org/">Temp-Mail</a> - Correos temporales gratuitos para evitar spam.</li>
+            <li><a href="https://proton.me/">ProtonMail</a> - Correos seguros y privados de ProtonMail.</li>
+            <li><a href="https://distrosea.com/es/">Distrosea</a> - Descubre tu próxima distribución Linux con este test interactivo.</li>
+            <li><a href="https://distrowatch.com/">DistroWatch</a> - Rastreador de distribuciones Linux con noticias, rankings y enlaces de descarga.</li>
+            <li><a href="https://archive.org/">Internet Archive</a> - Biblioteca digital con millones de libros, películas, software y más, todo gratuito y de acceso público.</li>
+            <li><a href="https://steamdb.info/">SteamDB</a> - Base de datos no oficial de Steam con estadísticas, precios y análisis de juegos.</li>
+            <li><a href="https://www.protondb.com/">ProtonDB</a> - Base de datos de compatibilidad de juegos de Steam en Linux, con reseñas y calificaciones de usuarios para ayudar a elegir qué juegos jugar en tu sistema Linux.</li>
+            <li><a href="https://www.qbittorrent.org/download">qBittorrent</a> - qBittorrent, cliente de torrent gratuito y de código abierto, disponible para Windows, Linux y macOS, con una interfaz fácil de usar y funciones avanzadas como búsqueda integrada, control remoto y soporte para enlaces magnet.</li>
+            <li><a href="https://onepace.net/">One Pace</a> - Anime One Piece sin relleno.</li>
+            <li><a href="https://www.chess.com/">Chess.com</a> - Juega al ajedrez en línea contra otros jugadores o la IA, con lecciones, análisis de partidas y torneos disponibles para mejorar tus habilidades ajedrecísticas.</li>
+            <li><a href="https://claude.ai/">Claude</a> - IA de Anthropic, competidora de ChatGPT, con enfoque en seguridad y ética, ofreciendo respuestas conversacionales avanzadas y personalizables para usuarios que buscan una alternativa a los modelos de lenguaje tradicionales.</li>
+            <li><a href="https://gemini.google.com/">Gemini</a> - Gemini, la nueva IA de Google, diseñada para competir con ChatGPT y Claude, ofreciendo capacidades avanzadas de procesamiento de lenguaje natural, generación de texto y comprensión contextual, con un enfoque en la integración con los servicios de Google y la mejora de la experiencia del usuario a través de respuestas más precisas y relevantes.</li>
+            <li><a href="https://chatgpt.com/">ChatGPT</a> - ChatGPT, el modelo de lenguaje desarrollado por OpenAI, que ha revolucionado la forma en que interactuamos con la inteligencia artificial, ofreciendo respuestas conversacionales avanzadas y personalizables para una amplia gama de aplicaciones, desde asistencia virtual hasta generación de contenido creativo.</li>
+            <li><a href="https://itch.io/">Itch.io</a> - Plataforma de juegos indie con una amplia variedad de títulos únicos y creativos, que ofrece a los desarrolladores independientes la oportunidad de publicar y vender sus juegos directamente a los jugadores, fomentando la innovación y la diversidad en la industria del videojuego.</li>
+            <li><a href="https://retroachievements.org/">RetroAchievements</a> - Logros para juegos retro, compatible con múltiples emuladores y plataformas, que permite a los jugadores ganar logros mientras juegan a sus juegos clásicos favoritos, añadiendo una nueva capa de desafío y diversión a la experiencia de juego retro.</li>
+            <li><a href="https://myanimelist.net/">MyAnimeList</a> - Base de datos de anime y manga, con reseñas, calificaciones y listas personalizadas para ayudar a los fans a descubrir y organizar sus series favoritas.</li>
+            <li><a href="https://www.imdb.com/">IMDb</a> - Base de datos de películas, series y celebridades, con reseñas, calificaciones y noticias del mundo del entretenimiento.</li>
+            <li><a href="https://seriesgraph.com/">SeriesGraph</a> - Base de datos de series, con reseñas, calificaciones y recomendaciones personalizadas para ayudar a los espectadores a descubrir nuevas series de televisión basadas en sus gustos y preferencias.</li>
+           <h2>Wifi Debian</h2>
+           <pre>Uso: nmcli device wifi {Comando}
+
+<strong>COMANDOS</strong>
+  connect        conectarse a una red Wi-Fi
+  help           mostrar esta ayuda
+  hotspot        crear un punto de acceso Wi-Fi (hotspot)
+  list           listar las redes Wi-Fi disponibles
+  rescan         volver a escanear las redes Wi-Fi disponibles
+  show-password  mostrar la contraseña de la red Wi-Fi actual
+        </pre>
+        <h2>Audio Debian</h2>
+<pre>Uso: wpctl [OPCIÓN…] COMANDO [OPCIONES_DE_COMANDO]
+
+<strong>Comandos:</strong>
+  status               mostrar estado
+  get-volume ID        obtener el volumen del ID
+  inspect ID           inspeccionar el ID
+  set-default ID       establecer ID como predeterminado
+  set-volume ID VOL[%][-/+]  establecer volumen del ID (ej. 0.5 o 50%+)
+  set-mute ID 1|0|toggle     silenciar ID (1=sí, 0=no, toggle=alternar)
+  set-profile ID ÍNDICE      establecer perfil del ID
+  set-route ID ÍNDICE        establecer ruta del ID
+  clear-default [ID]         quitar predeterminado [ID]
+  settings [CLAVE] [VALOR]   ajustes de WirePlumber
+  set-log-level [ID] NIVEL   establecer nivel de registro de logs</pre>
+
+<!-- OTROS FIN -->
+
+        </ul>
+        <p></p>
+    </div>
+
+
+
+
+    <div id="android" class="page">
+        <h2>ANDROID</h2>
+<ul>
+            <li><a href="https://apkvision.org/">APKVision</a> - APKs Piratas.</li>
+        <li><a href="https://www.apkmirror.com/">APKMirror</a> - APKs Oficiales.</li>
+
+        <p></p>
+    </div>
+
+
+
+    <div id="soft" class="page">
+        <h2>SOFTWARE</h2>
+        <h3>Sistemas Operativos</h3>
+        <ul>
+            <li><a href="https://www.debian.org/">Debian</a> - Distribución estable.</li>
+            <li><a href="https://nixos.org">NixOS</a> - Distribución inmutable.</li>
+            <li><a href="https://archlinux.org">Arch Linux</a> - Rolling release.</li>
+            <li><a href="https://manjaro.org">Manjaro</a> - Rolling release fácil de usar.</li>
+            <li><a href="https://elementary.io">elementary OS</a> - Distribución enfocada en la simplicidad y el diseño.</li>
+            <li><a href="https://q4os.org">q4os</a> - Distribución ligera basada en Debian.</li>
+            <li><a href="https://ubuntu.com">Ubuntu</a> - La distribución más popular.</li>
+            <li><a href="https://fedoraproject.org">Fedora</a> - Distribución de vanguardia.</li>
+            <li><a href="https://massgrave.dev/">Massgrave</a> - Windows/Office.</li>
+        </ul>
+        <h3>Utilidades</h3>
+        <ul>
+            <li><a href="https://ventoy.net/">Ventoy</a> - Multiboot USB simple.</li>
+            <li><a href="https://rufus.ie/">Rufus</a> - Crear USBs de arranque (solo Windows).</li>
+            <li><a href="https://www.balena.io/etcher/">Etcher</a> - Crear USBs de arranque (multiplataforma).</li>
+        </ul>
+        <h3>Discord</h3>
+        <ul>
+            <li><a href="https://equicord.org/">Equicord</a> - Discord plugins / addons.</li>
+        </ul>
+
+    </div>
+
+    <div id="cyber" class="page">
+        <h2>CYBER/OSINT</h2>
+        <ul>
+            <li><a href="https://osintframework.com/">OSINT Framework</a> - Árbol de herramientas de búsqueda.</li>
+            <li><a href="https://www.shodan.io/">Shodan</a> - Motor de búsqueda de dispositivos.</li>
+            <li><a href="https://haveibeenpwned.com/">Pwned?</a> - Chequeo de filtraciones de emails.</li>
+            <li><a href="https://github.com/htr-tech/nexphisher">Nexphisher</a> - Herramienta de auditoría social.</li>
+            <li><a href="https://www.kali.org/">Kali Linux</a> - La distro estándar de Pentesting.</li>
+            <li><a href="https://www.virustotal.com/">VirusTotal</a> - Análisis de archivos y URLs sospechosas.</li>
+        </ul>
+    </div>
+
+    <div id="multi" class="page">
+        <h2>MULTIMEDIA</h2>
+        <ul>
+            <li><a href="https://repelisplus.lat/">RepelisPlus</a> - Películas y series en Latino.</li>
+            <li><a href="https://dominioshdfull.com/">HDFull</a> - Películas y series en castellano.</li>
+            <li><a href="https://latanime.org/">LatAnime</a> - Animes en latino y castellano.</li>
+            <li><a href="https://animev1.com/">AnimeV1</a> - Animes en español.</li>
+            <li><a href="https://aniwatchtv.to/home">AniWatchTV</a> - Animes en Ingles.</li>
+            <li><a href="https://github.com/pear-devs/pear-desktop">YT Music Pear</a> - YT Music pirata.</li>
+
+        </ul>
+        <h3>Contenido Adulto</h3>
+        <ul>
+            <li><a href="https://www.pornhub.com/">PornHub</a></li>
+            <li><a href="https://rule34video.com/">Rule34Video</a></li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <center>
+        <p>CP WORLD © 2026 - By PapaCalvo</p>
+    </center>
+<script>
+        function nav(id) {
+            var p = document.getElementsByClassName('page');
+            
+            // 1. Limpiamos clases y estilos de todas las páginas
+            for(var i=0; i<p.length; i++) {
+                p[i].classList.remove('active');
+                p[i].style.display = ""; // Resetea el display por si venimos de una búsqueda
+                
+                // 2. Restauramos la visibilidad de todos los elementos internos
+                let elementos = p[i].querySelectorAll('li, h2, h3, p');
+                for(let el of elementos) el.style.display = "";
+            }
+
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function filtrarTodo() {
+            let input = document.getElementById('buscador').value.toLowerCase();
+            let secciones = document.getElementsByClassName('page');
+
+            // Si el buscador está vacío, volvemos a la pestaña de Inicio
+            if (input.length === 0) {
+                nav('home');
+                return;
+            }
+
+            for (let s of secciones) {
+                let hayCoincidenciaEnSeccion = false;
+                // Seleccionamos elementos de lista, títulos y párrafos
+                let elementos = s.querySelectorAll('li, h2, h3, p');
+
+                for (let el of elementos) {
+                    let texto = el.textContent.toLowerCase();
+                    
+                    if (texto.includes(input)) {
+                        el.style.display = ""; // Mostrar si coincide
+                        hayCoincidenciaEnSeccion = true;
+                    } else {
+                        el.style.display = "none"; // Ocultar si no coincide
+                    }
+                }
+
+                if (hayCoincidenciaEnSeccion) {
+                    s.style.display = "block";
+                    s.classList.add('active');
+                } else {
+                    s.style.display = "none";
+                    s.classList.remove('active');
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
