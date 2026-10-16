@@ -1,568 +1,393 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" :class="{ 'dark': darkMode }">
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Biblioteca HTML Moderna</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
-                    },
-                }
-            }
-        }
-    </script>
-    <!-- Google Fonts: Inter & JetBrains Mono -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RMDH-AC</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%93%84%3C/text%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#fff;color:#000;font:12px/1.4 'Courier New',Courier,monospace;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:#00e}a:visited{color:#551a8b}
+#lib{max-width:1180px;margin:0 auto;padding:8px 8px 40px}#lib.off{display:none}
+.ban{border:3px double #000;padding:6px 8px;margin-bottom:6px;text-align:center}
+.ban b{display:block;font-size:15px;letter-spacing:.12em}
+.ban i{font-size:10px}
+h2{font-size:12px;margin:12px 0 4px;padding:2px 6px;background:#000;color:#fff;letter-spacing:.08em;font-weight:bold}
+p{margin:4px 0;text-align:justify}
+.sm{font-size:10px;color:#333}
+.box{border:1px solid #000;padding:6px;margin:4px 0}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:4px 8px}
+.ctl label{display:block;font-size:10px;font-weight:bold}
+input[type=search],select,button,.btn{font:11px 'Courier New',monospace;border:1px solid #000;border-radius:0;background:#fff;color:#000;padding:3px 4px;min-height:30px;width:100%}
+button,.btn{width:auto;cursor:pointer;background:#e8e8e8;display:inline-flex;align-items:center;text-decoration:none;white-space:nowrap}
+button:active{background:#000;color:#fff}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px 10px}
+.st div{border-bottom:1px dotted #777;display:flex;justify-content:space-between;gap:6px}
+.st span:last-child{font-weight:bold}
+.tw{overflow-x:auto;border:1px solid #000}
+table{border-collapse:collapse;width:100%;min-width:1000px;font-size:11px}
+th{position:sticky;top:0;background:#000;color:#fff;font-size:10px;padding:3px 4px;text-align:left;cursor:pointer;white-space:nowrap}
+td{border:1px solid #999;padding:1px 4px;white-space:nowrap}
+td.ti{white-space:normal;min-width:200px;font-size:12px}
+td.r{text-align:right}
+tr:nth-child(even) td{background:#f2f2f2}
+button.star{border:0;background:transparent;min-height:26px;padding:0 4px;font-size:15px}
+dl{margin:0;columns:2 340px;column-gap:14px;font-size:11px}
+dt{font-weight:bold;float:left;clear:left;width:7em}dd{margin:0 0 2px 7em}
+ol.fn{margin:4px 0;padding-left:22px;font-size:10px}
+.msg{border:1px dashed #000;padding:12px;text-align:center}
+code{background:#ffc;border:1px solid #999;padding:0 2px}
+#reader{display:none;flex-direction:column;height:100%}#reader.on{display:flex}
+.rb{display:flex;align-items:center;gap:6px;padding:4px 6px;border-bottom:2px solid #000;background:#e8e8e8}
+.rb .name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}
+#frame{flex:1;width:100%;border:0;background:#fff}
+@media(max-width:600px){dl{columns:1}}
+</style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 h-full flex flex-col transition-colors duration-300 selection:bg-indigo-500 selection:text-white">
+<body>
+<div id="lib">
+  <div class="ban"><b>REGISTRO MAESTRO DE DOCUMENTOS HIPERTEXTUALES · ARCHIVO CENTRAL</b>
+  <i>RMDH-AC · REV. 7.3.1-β · EXP. N.º 0041/HTML/26-A · CLASIF. NIVEL III-b (USO INTERNO) · SUPLE A REV. 7.2.9 (DEROGADA)</i></div>
+  <h2>§0 · AVISO PRELIMINAR Y ÁMBITO DE APLICACIÓN</h2>
+  <p>El presente registro se rige por el principio de enumeración exhaustiva no exclusiva de recursos hipertextuales (en adelante, «RH») alojados en el repositorio de origen, entendiéndose por tal el conjunto C = {x ∈ R | ext(x) ∈ {.html, .htm}} descontadas las exclusiones de §CFG. Toda cifra aquí consignada es de carácter indicativo, derivada por análisis léxico elemental del flujo de bytes de cada RH, y no constituye garantía alguna de exactitud semántica [1][2]. La lectura de este documento no presupone conocimiento previo, aunque lo agradece.</p>
+  <div id="cont"></div>
+  <h2>§1 · PARÁMETROS DE INTERROGACIÓN (Φ, Ω, Ψ)</h2>
+  <div class="box ctl">
+    <label>Φ · CADENA DE COINCIDENCIA (ID∣NOM∣TÍT, insens.)<input type="search" id="q" aria-label="Φ"></label>
+    <label>Ω · CRITERIO DE ORDENACIÓN (ORD)
+      <select id="sort">
+        <option value="title">ORD-01 · TÍT ↑ (colación es)</option>
+        <option value="id">ORD-02 · ID₁₆ ↑</option>
+        <option value="recent">ORD-03 · τ(últ. apertura) ↓</option>
+        <option value="prog">ORD-04 · AVN% ↓</option>
+        <option value="size">ORD-05 · Ø(B) ↓</option>
+        <option value="words">ORD-06 · PAL ↓</option>
+        <option value="tags">ORD-07 · ETQ ↓</option>
+      </select></label>
+    <label>Ψ · PREDICADO DE ESTADO (EST)
+      <select id="mode">
+        <option value="all">Ψ0 · ∀ (sin restricción)</option>
+        <option value="fav">Ψ1 · MRC = ★</option>
+        <option value="new">Ψ2 · EST = N</option>
+        <option value="part">Ψ3 · EST = P</option>
+        <option value="done">Ψ4 · EST = C</option>
+      </select></label>
+    <label id="folderWrap" style="display:none">Λ · PARTICIÓN POR DIRECTORIO (RMD)<select id="folder"></select></label>
+  </div>
+  <h2>§2 · AGREGADOS ESTADÍSTICOS DE LA MUESTRA (n, Σ, μ, M, σ)</h2>
+  <div class="box st" id="stats"></div>
+  <p class="sm" id="count"></p>
+  <h2>§3 · REGISTRO NOMINAL DE RECURSOS (pulse la cabecera para reordenar)</h2>
+  <div class="tw"><table><thead><tr id="th"></tr></thead><tbody id="shelves"></tbody></table></div>
+  <h2>§4 · GLOSARIO DE ABREVIATURAS, SÍMBOLOS Y CÓDIGOS DE ESTADO</h2>
+  <div class="box"><dl>
+    <dt>ID₁₆</dt><dd>Huella FNV-1a (32 bits, hex) de la ruta canónica.</dd>
+    <dt>RMD</dt><dd>Código de directorio contenedor; «·» = raíz.</dd>
+    <dt>NOM</dt><dd>Nombre de archivo sin ruta.</dd>
+    <dt>TÍT</dt><dd>Contenido de &lt;title&gt;; en su defecto, NOM normalizado.</dd>
+    <dt>Ø(B)</dt><dd>Longitud en octetos del flujo.</dd>
+    <dt>PAL</dt><dd>Palabras tras eliminar marcado, &lt;script&gt; y &lt;style&gt;.</dd>
+    <dt>ETQ</dt><dd>Total de etiquetas de apertura, cierre y declaración.</dd>
+    <dt>SCR</dt><dd>Bloques &lt;script&gt;. 0 = documento estático.</dd>
+    <dt>GRF</dt><dd>Elementos &lt;img&gt;, &lt;svg&gt; y &lt;canvas&gt;.</dd>
+    <dt>ENL</dt><dd>Anclas &lt;a&gt;.</dd>
+    <dt>ENC</dt><dd>Encabezados h1–h6.</dd>
+    <dt>LÍN</dt><dd>Saltos de línea + 1.</dd>
+    <dt>CRC</dt><dd>Huella FNV-1a del contenido completo (verifica cambios).</dd>
+    <dt>AVN</dt><dd>Posición máxima de desplazamiento, 0–100 %.</dd>
+    <dt>EST</dt><dd>N = nulo (0 %) · P = parcial (1–94 %) · C = completo (≥95 %).</dd>
+    <dt>MRC</dt><dd>Marca de favorito (★ / ☆), alternable.</dd>
+    <dt>…</dt><dd>Magnitud pendiente de cómputo.</dd>
+  </dl></div>
+  <h2>§5 · ÓRDENES DE TECLADO (ÁMBITO GLOBAL)</h2>
+  <p class="box">[ / ] → foco en Φ · [ Esc ] → RET (retorno al registro) · [ ← ] ANT · [ → ] SIG · [ f ] alterna MRC del RH en lectura. En lectura, el desplazamiento se registra con latencia de 250 ms y persiste en el almacenamiento local del agente de usuario [3].</p>
+  <h2>§6 · NOTAS AL PIE Y SALVEDADES</h2>
+  <ol class="fn">
+    <li>La enumeración se obtiene de <code>books.json</code>, si existe; de lo contrario, de la API pública de árboles Git (límite: 60 consultas/h por origen, caché 10 min).</li>
+    <li>Las magnitudes léxicas (PAL, ETQ…) proceden de expresiones regulares y pueden diferir de un análisis sintáctico completo.</li>
+    <li>Los estados (AVN, EST, MRC, τ) son locales a este agente de usuario; no se sincronizan entre dispositivos.</li>
+    <li>Cualquier discrepancia entre ID₁₆ y CRC tras una edición del RH es esperable y no constituye error.</li>
+    <li>Parámetros opcionales de despliegue: véase el objeto <code>CONFIG</code>.</li>
+  </ol>
+  <p class="sm">— FIN DEL DOCUMENTO RMDH-AC/0041 · PÁG. 1/1 · SIN FIRMA ELECTRÓNICA —</p>
+</div>
+<div id="reader">
+  <div class="rb">
+    <button id="back">⟵ RET</button>
+    <button class="star" id="rfav" title="Favorito">☆</button>
+    <span class="name" id="rname"></span>
+    <button class="nav" id="prev" title="ANT">‹ ANT</button>
+    <button class="nav" id="next" title="SIG">SIG ›</button>
+    <a class="btn" id="open" target="_blank" rel="noopener" title="Abrir en pestaña nueva">↗</a>
+  </div>
+  <iframe id="frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"></iframe>
+</div>
 
-    <!-- Background glow accents -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/10 dark:bg-indigo-600/5 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/2 -right-40 w-96 h-96 bg-cyan-600/10 dark:bg-cyan-600/5 rounded-full blur-3xl"></div>
-    </div>
+<script>
+/* Configuración opcional: se detecta sola desde la URL usuario.github.io/repo/.
+   Con dominio propio, completa usuario y repo. */
+var CONFIG = {
+  user: '',
+  repo: '',
+  folder: '',
+  exclude: ['index.html','404.html']
+};
 
-    <!-- Library Main Container -->
-    <div id="lib" class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex-grow flex flex-col">
-        
-        <!-- Header / Navigation Bar -->
-        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 pb-6 border-b border-slate-200 dark:border-slate-800/80">
-            <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-2">
-                    <i class="fa-solid fa-book-bookmark"></i> E-Book Library
-                </div>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                    Biblioteca <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">HTML</span>
-                </h1>
-            </div>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var books=[],order=[],cur=null;
+  var BASE=location.pathname.replace(/[^\/]*$/,'');
 
-            <!-- Global Action Controls -->
-            <div class="flex items-center gap-3">
-                <!-- View Mode Toggle -->
-                <div class="bg-slate-200/70 dark:bg-slate-900 p-1 rounded-xl border border-slate-300/60 dark:border-slate-800 flex items-center gap-1">
-                    <button id="view-grid" onclick="setViewMode('grid')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white dark:bg-indigo-600 shadow-sm text-slate-900 dark:text-white" title="Vista Cuadrícula">
-                        <i class="fa-solid fa-border-all"></i> <span class="hidden sm:inline">Cuadrícula</span>
-                    </button>
-                    <button id="view-list" onclick="setViewMode('list')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Vista Lista">
-                        <i class="fa-solid fa-list"></i> <span class="hidden sm:inline">Lista</span>
-                    </button>
-                </div>
+  function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
 
-                <!-- Theme Toggle Button -->
-                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-300/60 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:border-indigo-500 transition-colors shadow-sm" title="Cambiar Tema">
-                    <i id="theme-icon" class="fa-solid fa-moon dark:hidden"></i>
-                    <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
-                </button>
-            </div>
-        </header>
+  /* estado del lector: favoritos, avance, último abierto */
+  var S=store('lib:state')||{};
+  function st(p){return S[p]||(S[p]={})}
+  function saveState(){store('lib:state',S)}
+  function pct(p){return (S[p]&&S[p].prog)||0}
+  function isDone(p){return pct(p)>=95}
 
-        <!-- Continue Reading Banner Section -->
-        <div id="cont" class="mb-8"></div>
-
-        <!-- Controls Filter Panel -->
-        <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 rounded-2xl p-4 sm:p-5 shadow-lg mb-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
-                
-                <!-- Search Input -->
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                    </span>
-                    <input type="search" id="q" placeholder="Buscar por título o ruta..." aria-label="Buscar"
-                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                </div>
-
-                <!-- Sort Selector -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Ordenar por</label>
-                    <select id="sort" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                        <option value="title">Título A-Z</option>
-                        <option value="recent">Últimos abiertos</option>
-                        <option value="prog">Mayor avance</option>
-                        <option value="size">Más largos</option>
-                    </select>
-                </div>
-
-                <!-- Mode Filter -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Filtrar estado</label>
-                    <select id="mode" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                        <option value="all">Todos los libros</option>
-                        <option value="fav">⭐ Favoritos</option>
-                        <option value="new">🆕 Sin empezar</option>
-                        <option value="part">⏳ En curso</option>
-                        <option value="done">✅ Terminados</option>
-                    </select>
-                </div>
-
-                <!-- Folder Selector -->
-                <div id="folderWrap" style="display:none">
-                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Carpeta</label>
-                    <select id="folder" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"></select>
-                </div>
-
-            </div>
-            
-            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-500 dark:text-slate-400">
-                <span id="count" class="font-medium">Cargando biblioteca...</span>
-            </div>
-        </div>
-
-        <!-- Shelves / Content Area -->
-        <div id="shelves" class="space-y-8 flex-grow"></div>
-    </div>
-
-    <!-- Reader Mode Overlay / Container -->
-    <div id="reader" class="fixed inset-0 z-50 bg-slate-950 flex-col h-full hidden">
-        <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between gap-4 shadow-md z-10">
-            <div class="flex items-center gap-3 min-w-0">
-                <button id="back" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-2 transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i> <span class="hidden sm:inline">Volver</span>
-                </button>
-                <button id="rfav" class="text-amber-400 hover:scale-110 text-xl transition-transform px-1" title="Favorito">☆</button>
-                <span class="name text-sm md:text-base font-semibold text-slate-900 dark:text-white truncate" id="rname"></span>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700">
-                    <button id="prev" class="w-9 h-9 rounded-lg hover:bg-white dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-colors" title="Libro Anterior">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
-                    </button>
-                    <button id="next" class="w-9 h-9 rounded-lg hover:bg-white dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-colors" title="Libro Siguiente">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
-                    </button>
-                </div>
-                <a class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm" id="open" target="_blank" rel="noopener" title="Abrir en pestaña nueva">
-                    <span>Abrir</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                </a>
-            </div>
-        </div>
-        <iframe id="frame" class="w-full flex-grow border-0 bg-white" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"></iframe>
-    </div>
-
-    <!-- Core JavaScript Application Logic -->
-    <script>
-        /* Configuración opcional */
-        var CONFIG = {
-            user: '',
-            repo: '',
-            folder: '',
-            exclude: ['index.html','404.html']
-        };
-
-        // View Mode State ('grid' or 'list')
-        let viewMode = localStorage.getItem('lib:viewMode') || 'grid';
-
-        function setViewMode(mode) {
-            viewMode = mode;
-            localStorage.setItem('lib:viewMode', mode);
-            
-            const btnGrid = document.getElementById('view-grid');
-            const btnList = document.getElementById('view-list');
-            
-            if (mode === 'grid') {
-                btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white dark:bg-indigo-600 shadow-sm text-slate-900 dark:text-white";
-                btnList.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-            } else {
-                btnList.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white dark:bg-indigo-600 shadow-sm text-slate-900 dark:text-white";
-                btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-            }
-            build();
-            render();
-        }
-
-        function toggleDarkMode() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDark);
-        }
-
-        // Initialize view mode UI state on load
-        document.addEventListener('DOMContentLoaded', () => {
-            setViewMode(viewMode);
+  /* descubrir archivos */
+  function candidates(){
+    if(CONFIG.user&&CONFIG.repo)return [{u:CONFIG.user,r:CONFIG.repo}];
+    var m=location.hostname.match(/^(.+)\.github\.io$/);
+    if(!m)return [];
+    var u=m[1],seg=location.pathname.split('/').filter(Boolean)[0],c=[];
+    if(seg&&!/\.html?$/i.test(seg))c.push({u:u,r:seg});
+    c.push({u:u,r:u+'.github.io'});
+    return c;
+  }
+  function listFromApi(){
+    var cs=candidates(),i=0;
+    function next(){
+      if(i>=cs.length)return Promise.reject(new Error('norepo'));
+      var c=cs[i++];
+      return fetch('https://api.github.com/repos/'+c.u+'/'+c.r+'/git/trees/HEAD?recursive=1')
+        .then(function(r){if(r.status===403)throw new Error('rate');if(!r.ok)return next();return r.json()})
+        .then(function(j){
+          if(!j||!j.tree)return j;
+          var isProject=c.r.toLowerCase()!==(c.u+'.github.io').toLowerCase();
+          var root=isProject?'/'+c.r+'/':'/';
+          if(CONFIG.user&&CONFIG.repo)root=BASE;
+          return j.tree.filter(function(n){return n.type==='blob'&&/\.html?$/i.test(n.path)})
+            .map(function(n){return {path:n.path,href:root+n.path.split('/').map(encodeURIComponent).join('/'),size:n.size||0}});
         });
+    }
+    return next();
+  }
+  function listFromJson(){
+    return fetch('books.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('nojson');return r.json()})
+      .then(function(a){return a.map(function(b){
+        var f=typeof b==='string'?b:b.file;
+        return {path:f,href:BASE+f.split('/').map(encodeURIComponent).join('/'),title:b.title||null,size:0};
+      })});
+  }
+  function discover(){
+    var cache=store('lib:list');
+    if(cache&&Date.now()-cache.t<10*60*1000)return Promise.resolve(cache.l);
+    return listFromJson().catch(function(){return listFromApi()}).then(function(l){
+      store('lib:list',{t:Date.now(),l:l});return l;
+    }).catch(function(e){if(cache)return cache.l;throw e});
+  }
 
-        (function(){
-            var $=function(i){return document.getElementById(i)};
-            var books=[],order=[],cur=null;
-            var BASE=location.pathname.replace(/[^\/]*$/,'');
+  /* títulos */
+  function titleFor(b){
+    var tc=store('lib:titles')||{};
+    if(tc[b.path])return Promise.resolve(tc[b.path]);
+    return fetch(b.href).then(function(r){return r.text()}).then(function(h){
+      var m=h.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      var t=(m&&m[1].replace(/\s+/g,' ').trim())||'';
+      var tc2=store('lib:titles')||{};tc2[b.path]=t;store('lib:titles',tc2);return t;
+    }).catch(function(){return ''});
+  }
+  function fallbackTitle(p){return p.split('/').pop().replace(/\.html?$/i,'').replace(/[-_]+/g,' ')}
+  function kb(n){return n?(n<1024*100?(n/1024).toFixed(0):(n/1024).toFixed(0))+' KB':'—'}
+  function folderOf(p){var k=p.lastIndexOf('/');return k>-1?p.slice(0,k):''}
 
-            function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+  /* registro */
+  function fnv(t){var h=2166136261;for(var i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return('00000000'+h.toString(16)).slice(-8).toUpperCase()}
+  function sz(b){return b.size||(b.stats&&b.stats.by)||0}
+  function nm(b,k){return b.stats?b.stats[k]:-1}
+  function est(p){var v=pct(p);return v>=95?'C':v>0?'P':'N'}
+  function visible(){
+    var q=$('q').value.trim().toLowerCase(),mode=$('mode').value,fo=$('folder').value,sort=$('sort').value;
+    var l=books.filter(function(b){
+      if(q&&b.title.toLowerCase().indexOf(q)<0&&b.path.toLowerCase().indexOf(q)<0&&fnv(b.path).toLowerCase().indexOf(q)<0)return false;
+      if(fo&&folderOf(b.path)!==fo)return false;
+      var e=est(b.path);
+      if(mode==='fav'&&!(S[b.path]&&S[b.path].fav))return false;
+      if(mode==='new'&&e!=='N')return false;
+      if(mode==='part'&&e!=='P')return false;
+      if(mode==='done'&&e!=='C')return false;
+      return true;
+    });
+    l.sort(function(a,b){
+      var r=0;
+      if(sort==='recent')r=((S[b.path]&&S[b.path].last)||0)-((S[a.path]&&S[a.path].last)||0);
+      else if(sort==='prog')r=pct(b.path)-pct(a.path);
+      else if(sort==='size')r=sz(b)-sz(a);
+      else if(sort==='words')r=nm(b,'w')-nm(a,'w');
+      else if(sort==='tags')r=nm(b,'tg')-nm(a,'tg');
+      else if(sort==='id')r=fnv(a.path)<fnv(b.path)?-1:1;
+      return r||a.title.localeCompare(b.title,'es');
+    });
+    return l;
+  }
+  var COLS=[['ID₁₆','id'],['RMD',''],['NOM',''],['TÍT','title'],['Ø(B)','size'],['PAL','words'],['ETQ','tags'],['SCR',''],['GRF',''],['ENL',''],['ENC',''],['LÍN',''],['CRC',''],['AVN','prog'],['EST',''],['MRC','']];
+  var fcode={};
+  function stat(label,val){var d=document.createElement('div');var a=document.createElement('span');a.textContent=label;var b=document.createElement('span');b.textContent=val;d.appendChild(a);d.appendChild(b);return d}
+  function f2(x){return isFinite(x)?(Math.round(x*100)/100).toLocaleString('es'):'…'}
+  function render(){
+    var th=$('th');
+    if(!th.children.length)COLS.forEach(function(c){var e=document.createElement('th');e.textContent=c[0]+(c[1]?' ⇅':'');if(c[1])e.onclick=function(){$('sort').value=c[1];$('sort').dispatchEvent(new Event('change'));render()};th.appendChild(e)});
+    var fav=0,done=0,part=0,fs={},ids=[],sizes=[],ld=0;
+    books.forEach(function(b){
+      if(S[b.path]&&S[b.path].fav)fav++;var e=est(b.path);if(e==='C')done++;if(e==='P')part++;
+      fs[folderOf(b.path)]=1;ids.push(fnv(b.path));var z=sz(b);if(z)sizes.push(z);if(b.stats)ld++;
+    });
+    Object.keys(fs).sort().forEach(function(k,i){fcode[k]=k?'D'+(i+1).toString().padStart(2,'0'):'·'});
+    var n=sizes.length,tot=sizes.reduce(function(a,b){return a+b},0),mu=n?tot/n:NaN;
+    var srt=sizes.slice().sort(function(a,b){return a-b}),med=n?(n%2?srt[(n-1)/2]:(srt[n/2-1]+srt[n/2])/2):NaN;
+    var sd=n?Math.sqrt(sizes.reduce(function(a,b){return a+(b-mu)*(b-mu)},0)/n):NaN;
+    var w=0;books.forEach(function(b){if(b.stats)w+=b.stats.w});
+    var sb=$('stats');sb.innerHTML='';
+    [['n (RH)',books.length],['Σ Ø(B)',f2(tot)],['μ Ø(B)',f2(mu)],['M Ø(B)',f2(med)],['σ Ø(B)',f2(sd)],['Σ PAL',ld?f2(w):'…'],['|Λ| dirs.',Object.keys(fs).length],['Σ ★',fav],['Σ EST=P',part],['Σ EST=C',done],['ρ C/n',books.length?f2(done/books.length*100)+' %':'—'],['cómputo léxico',ld+'/'+books.length],['ΣID huella',fnv(ids.sort().join('|'))]].forEach(function(x){sb.appendChild(stat(x[0],x[1]))});
 
-            var S=store('lib:state')||{};
-            function st(p){return S[p]||(S[p]={})}
-            function saveState(){store('lib:state',S)}
-            function pct(p){return (S[p]&&S[p].prog)||0}
-            function isDone(p){return pct(p)>=95}
+    var last=null;
+    books.forEach(function(b){var s=S[b.path];if(s&&s.last&&pct(b.path)>0&&est(b.path)!=='C'&&(!last||s.last>S[last.path].last))last=b});
+    var c=$('cont');c.innerHTML='';
+    if(last){var d=document.createElement('div');d.className='box';d.appendChild(document.createTextNode('REANUDACIÓN PENDIENTE (último RH con EST=P por τ): '));var a=document.createElement('a');a.href='#'+encodeURIComponent(last.path);a.textContent=last.title;d.appendChild(a);d.appendChild(document.createTextNode(' [AVN '+pct(last.path)+' %]'));c.appendChild(d)}
 
-            function candidates(){
-                if(CONFIG.user&&CONFIG.repo)return [{u:CONFIG.user,r:CONFIG.repo}];
-                var m=location.hostname.match(/^(.+)\.github\.io$/);
-                if(!m)return [];
-                var u=m[1],seg=location.pathname.split('/').filter(Boolean)[0],c=[];
-                if(seg&&!/\.html?$/i.test(seg))c.push({u:u,r:seg});
-                c.push({u:u,r:u+'.github.io'});
-                return c;
-            }
+    var list=visible(),tb=$('shelves');order=list.map(function(b){return b.path});
+    $('count').textContent='Resultado de la interrogación: '+list.length+' de '+books.length+' RH (selectividad '+(books.length?f2(list.length/books.length*100):'—')+' %).';
+    tb.innerHTML='';
+    if(!list.length){var r=tb.insertRow(),td=r.insertCell();td.colSpan=COLS.length;td.className='msg';td.textContent='∅ — conjunto vacío bajo los predicados Φ∧Ω∧Ψ vigentes.';return}
+    list.forEach(function(b){
+      var r=tb.insertRow(),sx=b.stats,g=function(k){return sx?sx[k]:'…'};
+      function cell(t,cls){var x=r.insertCell();x.textContent=t;if(cls)x.className=cls;return x}
+      var ca=cell('');var al=document.createElement('a');al.href='#'+encodeURIComponent(b.path);al.textContent=fnv(b.path);ca.appendChild(al);
+      cell(fcode[folderOf(b.path)]||'·');cell(b.path.split('/').pop());
+      var t=cell('','ti');var at=document.createElement('a');at.href=al.href;at.textContent=b.title;t.appendChild(at);
+      cell(sz(b)||'…','r');cell(g('w'),'r');cell(g('tg'),'r');cell(g('sc'),'r');cell(g('im'),'r');cell(g('en'),'r');cell(g('hd'),'r');cell(g('ln'),'r');cell(sx?sx.k:'…');
+      cell(pct(b.path)+' %','r');cell(est(b.path));
+      var m=r.insertCell(),sb2=document.createElement('button');sb2.className='star';sb2.textContent=(S[b.path]&&S[b.path].fav)?'★':'☆';
+      sb2.onclick=function(){st(b.path).fav=!st(b.path).fav;saveState();render()};m.appendChild(sb2);
+    });
+  }
+  function loadMeta(b){
+    return fetch(b.href).then(function(r){return r.text()}).then(function(h){
+      var m=h.match(/<title[^>]*>([\s\S]*?)<\/title>/i),t=(m&&m[1].replace(/\s+/g,' ').trim())||'';
+      var cnt=function(re){return(h.match(re)||[]).length};
+      var x={by:h.length,w:h.replace(/<(script|style)[\s\S]*?<\/\1>/gi,' ').replace(/<[^>]*>/g,' ').split(/\s+/).filter(Boolean).length,tg:cnt(/<[a-z!\/][^>]*>/gi),sc:cnt(/<script/gi),im:cnt(/<(img|svg|canvas)[\s>]/gi),en:cnt(/<a\s/gi),hd:cnt(/<h[1-6][\s>]/gi),ln:h.split('\n').length,k:fnv(h)};
+      b.stats=x;if(t&&!b._fixed)b.title=t;
+      var sc=store('lib:stats')||{};sc[b.path]=x;store('lib:stats',sc);
+      if(t){var tc=store('lib:titles')||{};tc[b.path]=t;store('lib:titles',tc)}
+    }).catch(function(){b.stats={by:0,w:0,tg:0,sc:0,im:0,en:0,hd:0,ln:0,k:'ERR'}});
+  }
+  function message(html){$('count').textContent='';$('shelves').innerHTML='<div class="msg">'+html+'</div>'}
 
-            function listFromApi(){
-                var cs=candidates(),i=0;
-                function next(){
-                    if(i>=cs.length)return Promise.reject(new Error('norepo'));
-                    var c=cs[i++];
-                    return fetch('https://api.github.com/repos/'+c.u+'/'+c.r+'/git/trees/HEAD?recursive=1')
-                        .then(function(r){if(r.status===403)throw new Error('rate');if(!r.ok)return next();return r.json()})
-                        .then(function(j){
-                            if(!j||!j.tree)return j;
-                            var isProject=c.r.toLowerCase()!==(c.u+'.github.io').toLowerCase();
-                            var root=isProject?'/'+c.r+'/':'/';
-                            if(CONFIG.user&&CONFIG.repo)root=BASE;
-                            return j.tree.filter(function(n){return n.type==='blob'&&/\.html?$/i.test(n.path)})
-                                .map(function(n){return {path:n.path,href:root+n.path.split('/').map(encodeURIComponent).join('/'),size:n.size||0}});
-                        });
-                }
-                return next();
-            }
+  /* lector */
+  function find(p){return books.filter(function(x){return x.path===p})[0]}
+  function setFavBtn(){var b=$('rfav');b.textContent=(cur&&S[cur.path]&&S[cur.path].fav)?'★':'☆'}
+  function route(){
+    var p=decodeURIComponent(location.hash.slice(1)),b=p&&find(p);
+    if(b){
+      cur=b;
+      $('rname').textContent=b.title;
+      $('open').href=b.href;
+      if($('frame').getAttribute('src')!==b.href)$('frame').src=b.href;
+      st(b.path).last=Date.now();saveState();
+      setFavBtn();
+      $('lib').classList.add('off');$('reader').classList.add('on');
+      document.title=b.title;
+    }else{
+      cur=null;
+      $('reader').classList.remove('on');$('lib').classList.remove('off');
+      $('frame').removeAttribute('src');document.title='RMDH-AC';
+      render();
+    }
+  }
+  function step(d){
+    if(!cur)return;
+    var i=order.indexOf(cur.path);
+    if(i<0){order=books.map(function(b){return b.path});i=order.indexOf(cur.path)}
+    var n=order[i+d];
+    if(n)location.hash='#'+encodeURIComponent(n);
+  }
 
-            function listFromJson(){
-                return fetch('books.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('nojson');return r.json()})
-                    .then(function(a){return a.map(function(b){
-                        var f=typeof b==='string'?b:b.file;
-                        return {path:f,href:BASE+f.split('/').map(encodeURIComponent).join('/'),title:b.title||null,size:0};
-                    })});
-            }
+  /* guardar y recuperar posición de lectura */
+  var tmr=null;
+  $('frame').addEventListener('load',function(){
+    if(!cur)return;
+    var f=$('frame'),w,d,book=cur;
+    try{w=f.contentWindow;d=f.contentDocument.documentElement}catch(e){return}
+    if(!w||!d)return;
+    var s=st(book.path);
+    setTimeout(function(){try{if(s.scroll)w.scrollTo(0,s.scroll)}catch(e){}},60);
+    function measure(){
+      var max=Math.max(0,d.scrollHeight-w.innerHeight);
+      var y=w.scrollY||d.scrollTop||0;
+      s.scroll=y;
+      s.prog=max<=0?100:Math.min(100,Math.round(y/max*100));
+      saveState();
+    }
+    if(Math.max(0,d.scrollHeight-w.innerHeight)<=0){s.prog=100;saveState()}
+    w.addEventListener('scroll',function(){clearTimeout(tmr);tmr=setTimeout(measure,250)},{passive:true});
+  });
 
-            function discover(){
-                var cache=store('lib:list');
-                if(cache&&Date.now()-cache.t<10*60*1000)return Promise.resolve(cache.l);
-                return listFromJson().catch(function(){return listFromApi()}).then(function(l){
-                    store('lib:list',{t:Date.now(),l:l});return l;
-                }).catch(function(e){if(cache)return cache.l;throw e});
-            }
+  $('back').onclick=function(){if(history.length>1&&location.hash)history.back();else location.hash=''};
+  $('prev').onclick=function(){step(-1)};
+  $('next').onclick=function(){step(1)};
+  $('rfav').onclick=function(){if(!cur)return;st(cur.path).fav=!st(cur.path).fav;saveState();setFavBtn()};
+  window.addEventListener('hashchange',route);
+  ['q','sort','mode','folder'].forEach(function(id){$(id).addEventListener('input',render)});
 
-            function titleFor(b){
-                var tc=store('lib:titles')||{};
-                if(tc[b.path])return Promise.resolve(tc[b.path]);
-                return fetch(b.href).then(function(r){return r.text()}).then(function(h){
-                    var m=h.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-                    var t=(m&&m[1].replace(/\s+/g,' ').trim())||'';
-                    var tc2=store('lib:titles')||{};tc2[b.path]=t;store('lib:titles',tc2);return t;
-                }).catch(function(){return ''});
-            }
+  document.addEventListener('keydown',function(e){
+    var tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='SELECT')return;
+    if(e.key==='/'&&!cur){e.preventDefault();$('q').focus()}
+    else if(e.key==='Escape'&&cur)location.hash='';
+    else if(e.key==='ArrowLeft'&&cur)step(-1);
+    else if(e.key==='ArrowRight'&&cur)step(1);
+    else if(e.key==='f'&&cur)$('rfav').click();
+  });
 
-            function fallbackTitle(p){return p.split('/').pop().replace(/\.html?$/i,'').replace(/[-_]+/g,' ')}
-            function kb(n){return n?(n<1024*100?(n/1024).toFixed(0):(n/1024).toFixed(0))+' KB':'—'}
-            function folderOf(p){var k=p.lastIndexOf('/');return k>-1?p.slice(0,k):''}
+  /* arranque */
+  var ps=store('lib:prefs');
+  if(ps){if(ps.sort)$('sort').value=ps.sort;if(ps.mode)$('mode').value=ps.mode}
+  ['sort','mode'].forEach(function(id){$(id).addEventListener('change',function(){store('lib:prefs',{sort:$('sort').value,mode:$('mode').value})})});
 
-            function visible(){
-                var q=$('q').value.trim().toLowerCase(),mode=$('mode').value,fo=$('folder').value,sort=$('sort').value;
-                var l=books.filter(function(b){
-                    if(q&&b.title.toLowerCase().indexOf(q)<0&&b.path.toLowerCase().indexOf(q)<0)return false;
-                    if(fo&&folderOf(b.path)!==fo)return false;
-                    var p=pct(b.path);
-                    if(mode==='fav'&&!(S[b.path]&&S[b.path].fav))return false;
-                    if(mode==='new'&&p>0)return false;
-                    if(mode==='part'&&!(p>0&&p<95))return false;
-                    if(mode==='done'&&p<95)return false;
-                    return true;
-                });
-                l.sort(function(a,b){
-                    var r=0;
-                    if(sort==='recent')r=((S[b.path]&&S[b.path].last)||0)-((S[a.path]&&S[a.path].last)||0);
-                    else if(sort==='prog')r=pct(b.path)-pct(a.path);
-                    else if(sort==='size')r=b.size-a.size;
-                    return r||a.title.localeCompare(b.title,'es');
-                });
-                return l;
-            }
+  discover().then(function(l){
+    var ex=CONFIG.exclude.map(function(s){return s.toLowerCase()});
+    l=l.filter(function(b){
+      var low=b.path.toLowerCase();
+      if(ex.indexOf(low)>-1)return false;
+      if(CONFIG.folder&&low.indexOf(CONFIG.folder.toLowerCase().replace(/\/$/,'')+'/')!==0)return false;
+      return true;
+    });
+    var cached=store('lib:titles')||{};
+    books=l.map(function(b){b._fixed=!!b.title;b.title=b.title||cached[b.path]||fallbackTitle(b.path);return b});
+    if(!books.length)return message('No encontré archivos .html en el repositorio.<br>Sube tus HTML y recarga.');
 
-            var rows={},gEls={},built=false,io=null;
-            function metaText(b){var v=pct(b.path),a=[];if(isDone(b.path))a.push('✓ leído');else if(v>0)a.push(v+'%');if(b.size)a.push(kb(b.size));return a.join(' · ')}
+    var folders={};books.forEach(function(b){folders[folderOf(b.path)]=1});
+    var fk=Object.keys(folders).sort();
+    if(fk.length>1){
+      var sel=$('folder');sel.innerHTML='<option value="">Todas</option>';
+      fk.forEach(function(f){var o=document.createElement('option');o.value=f;o.textContent=f||'General';sel.appendChild(o)});
+      $('folderWrap').style.display='flex';
+    }
+    render();route();
 
-            function build(){
-                var box=$('shelves');box.innerHTML='';
-                if('IntersectionObserver' in window)io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.src=e.target.getAttribute('data-src');io.unobserve(e.target)}})},{rootMargin:'300px'});
-                
-                var gs={};books.forEach(function(b){var g=folderOf(b.path);(gs[g]=gs[g]||[]).push(b)});
-                var keys=Object.keys(gs).sort();
-
-                keys.forEach(function(g){
-                    var wrap=document.createElement('div');
-                    wrap.className = "space-y-4";
-                    if(keys.length>1||g){
-                        var h=document.createElement('h2');
-                        h.className = "text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 mt-6 mb-3";
-                        h.innerHTML = `<i class="fa-solid fa-folder text-indigo-500"></i> `+(g||'General');
-                        wrap.appendChild(h);
-                    }
-                    
-                    var container=document.createElement('div');
-                    if (viewMode === 'grid') {
-                        container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5";
-                    } else {
-                        container.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden";
-                    }
-                    wrap.appendChild(container);
-
-                    gs[g].forEach(function(b){
-                        var el=document.createElement('div');
-                        
-                        if (viewMode === 'grid') {
-                            el.className = "group bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between hover:border-indigo-500/50 dark:hover:border-indigo-500/50 transition-all duration-300 shadow-sm hover:shadow-xl relative overflow-hidden";
-                            
-                            // Top preview thumbnail
-                            var thWrap = document.createElement('a');
-                            thWrap.className = "block relative w-full h-36 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 mb-4";
-                            thWrap.href='#'+encodeURIComponent(b.path);
-                            thWrap.tabIndex=-1;
-
-                            var f=document.createElement('iframe');
-                            f.setAttribute('sandbox','allow-scripts allow-same-origin');f.setAttribute('scrolling','no');
-                            f.setAttribute('aria-hidden','true');f.tabIndex=-1;f.setAttribute('data-src',b.href);
-                            f.style.cssText = "position:absolute;left:0;top:0;width:1000px;height:700px;border:0;pointer-events:none;transform-origin:0 0;transform:scale(0.35);";
-                            thWrap.appendChild(f);
-                            if(io)io.observe(f);else f.src=b.href;
-
-                            // Title & info section
-                            var contentWrap = document.createElement('div');
-                            contentWrap.className = "flex items-start justify-between gap-2 mb-2";
-
-                            var a=document.createElement('a');
-                            a.href=thWrap.href;
-                            a.className = "font-bold text-slate-900 dark:text-white text-base group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2";
-
-                            var sb=document.createElement('button');
-                            sb.className='star text-slate-300 dark:text-slate-700 hover:text-amber-400 transition-colors shrink-0 text-xl';
-                            sb.title='Favorito';
-                            sb.onclick=function(e){e.preventDefault();st(b.path).fav=!st(b.path).fav;saveState();render()};
-
-                            contentWrap.appendChild(a);
-                            contentWrap.appendChild(sb);
-
-                            var m=document.createElement('div');
-                            m.className='meta text-xs font-mono text-slate-500 dark:text-slate-400 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/80';
-
-                            el.appendChild(thWrap);
-                            el.appendChild(contentWrap);
-                            el.appendChild(m);
-                            container.appendChild(el);
-
-                            rows[b.path]={el:el,star:sb,link:a,meta:m,g:g};
-
-                        } else {
-                            // List mode
-                            el.className = "row flex items-center gap-4 p-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors";
-                            
-                            var sb=document.createElement('button');
-                            sb.className='star text-slate-300 dark:text-slate-700 hover:text-amber-400 transition-colors shrink-0 text-xl';
-                            sb.title='Favorito';
-                            sb.onclick=function(){st(b.path).fav=!st(b.path).fav;saveState();render()};
-
-                            var t=document.createElement('div');
-                            t.className='t flex-1 min-w-0';
-
-                            var a=document.createElement('a');
-                            a.href='#'+encodeURIComponent(b.path);
-                            a.className = "font-semibold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate block text-sm sm:text-base";
-
-                            var m=document.createElement('div');
-                            m.className='meta text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5';
-
-                            t.appendChild(a);
-                            t.appendChild(m);
-
-                            el.appendChild(sb);
-                            el.appendChild(t);
-                            container.appendChild(el);
-
-                            rows[b.path]={el:el,star:sb,link:a,meta:m,g:g};
-                        }
-                    });
-                    gEls[g]=wrap;box.appendChild(wrap);
-                });
-
-                var none=document.createElement('div');
-                none.className='msg bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl p-8 text-center text-slate-500';
-                none.id='none';none.hidden=true;
-                none.innerHTML = `<i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-400"></i><p>No hay libros que coincidan con la búsqueda.</p>`;
-                box.appendChild(none);built=true;
-            }
-
-            function render(){
-                if(!built)return;
-                var favs=0,done=0;
-                books.forEach(function(b){if(S[b.path]&&S[b.path].fav)favs++;if(isDone(b.path))done++});
-                $('count').textContent=books.length+(books.length===1?' libro':' libros')+' · '+favs+(favs===1?' favorito':' favoritos')+' · '+done+(done===1?' terminado':' terminados');
-
-                var last=null;
-                books.forEach(function(b){var s=S[b.path];if(s&&s.last&&pct(b.path)>0&&!isDone(b.path)&&(!last||s.last>S[last.path].last))last=b});
-                var c=$('cont');c.innerHTML='';
-                if(last){
-                    var d=document.createElement('div');
-                    d.className='bg-gradient-to-r from-indigo-500/10 via-cyan-500/10 to-indigo-500/10 border border-indigo-500/20 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm';
-                    
-                    var infoDiv = document.createElement('div');
-                    infoDiv.className = "flex items-center gap-3.5";
-                    infoDiv.innerHTML = `
-                        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-bookmark"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Continuar lectura</p>
-                            <a href="#`+encodeURIComponent(last.path)+`" class="font-bold text-slate-900 dark:text-white hover:underline text-sm sm:text-base">${last.title}</a>
-                        </div>
-                    `;
-
-                    var rightDiv = document.createElement('div');
-                    rightDiv.className = "flex items-center gap-4 shrink-0";
-                    rightDiv.innerHTML = `
-                        <div class="text-right">
-                            <span class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">${pct(last.path)}% completado</span>
-                            <div class="w-24 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mt-1">
-                                <div class="bg-indigo-500 h-full rounded-full" style="width: ${pct(last.path)}%"></div>
-                            </div>
-                        </div>
-                        <a href="#`+encodeURIComponent(last.path)+`" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-sm transition-all">Leer</a>
-                    `;
-
-                    d.appendChild(infoDiv);
-                    d.appendChild(rightDiv);
-                    c.appendChild(d);
-                }
-
-                var list=visible(),idx={},seen={};
-                order=list.map(function(b){return b.path});
-                list.forEach(function(b,i){idx[b.path]=i;var r=rows[b.path];seen[r.g]=(seen[r.g]||0)+1;r.el.style.display='';r.el.style.order=i;});
-                books.forEach(function(b){
-                    var r=rows[b.path];
-                    if(idx[b.path]===undefined)r.el.style.display='none';
-                    r.link.textContent=b.title;r.meta.textContent=metaText(b);
-                    r.star.textContent=(S[b.path]&&S[b.path].fav)?'★':'☆';
-                    r.star.className = (S[b.path]&&S[b.path].fav) ? "star text-amber-400 hover:scale-110 transition-transform shrink-0 text-xl" : "star text-slate-300 dark:text-slate-700 hover:text-amber-400 transition-colors shrink-0 text-xl";
-                });
-                Object.keys(gEls).forEach(function(g){gEls[g].style.display=seen[g]?'':'none'});
-                $('none').hidden=list.length>0;
-            }
-
-            function message(html){$('count').textContent='';$('shelves').innerHTML='<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center text-slate-600 dark:text-slate-400 shadow-sm">'+html+'</div>'}
-
-            function find(p){return books.filter(function(x){return x.path===p})[0]}
-            function setFavBtn(){
-                var b=$('rfav');
-                var isFav = cur&&S[cur.path]&&S[cur.path].fav;
-                b.textContent=isFav?'★':'☆';
-                b.className = isFav ? "text-amber-400 hover:scale-110 text-xl transition-transform px-1" : "text-slate-400 hover:text-amber-400 text-xl transition-colors px-1";
-            }
-
-            function route(){
-                var p=decodeURIComponent(location.hash.slice(1)),b=p&&find(p);
-                if(b){
-                    cur=b;
-                    $('rname').textContent=b.title;
-                    $('open').href=b.href;
-                    if($('frame').getAttribute('src')!==b.href)$('frame').src=b.href;
-                    st(b.path).last=Date.now();saveState();
-                    setFavBtn();
-                    $('lib').style.display='none';$('reader').style.display='flex';
-                    document.title=b.title;
-                }else{
-                    cur=null;
-                    $('reader').style.display='none';$('lib').style.display='block';
-                    $('frame').removeAttribute('src');document.title='Biblioteca HTML';
-                    render();
-                }
-            }
-
-            function step(d){
-                if(!cur)return;
-                var i=order.indexOf(cur.path);
-                if(i<0){order=books.map(function(b){return b.path});i=order.indexOf(cur.path)}
-                var n=order[i+d];
-                if(n)location.hash='#'+encodeURIComponent(n);
-            }
-
-            var tmr=null;
-            $('frame').addEventListener('load',function(){
-                if(!cur)return;
-                var f=$('frame'),w,d,book=cur;
-                try{w=f.contentWindow;d=f.contentDocument.documentElement}catch(e){return}
-                if(!w||!d)return;
-                var s=st(book.path);
-                setTimeout(function(){try{if(s.scroll)w.scrollTo(0,s.scroll)}catch(e){}},60);
-                function measure(){
-                    var max=Math.max(0,d.scrollHeight-w.innerHeight);
-                    var y=w.scrollY||d.scrollTop||0;
-                    s.scroll=y;
-                    s.prog=max<=0?100:Math.min(100,Math.round(y/max*100));
-                    saveState();
-                }
-                if(Math.max(0,d.scrollHeight-w.innerHeight)<=0){s.prog=100;saveState()}
-                w.addEventListener('scroll',function(){clearTimeout(tmr);tmr=setTimeout(measure,250)},{passive:true});
-            });
-
-            $('back').onclick=function(){if(history.length>1&&location.hash)history.back();else location.hash=''};
-            $('prev').onclick=function(){step(-1)};
-            $('next').onclick=function(){step(1)};
-            $('rfav').onclick=function(){if(!cur)return;st(cur.path).fav=!st(cur.path).fav;saveState();setFavBtn()};
-            window.addEventListener('hashchange',route);
-            ['q','sort','mode','folder'].forEach(function(id){$(id).addEventListener('input',render)});
-
-            var ps=store('lib:prefs');
-            if(ps){if(ps.sort)$('sort').value=ps.sort;if(ps.mode)$('mode').value=ps.mode}
-            ['sort','mode'].forEach(function(id){$(id).addEventListener('change',function(){store('lib:prefs',{sort:$('sort').value,mode:$('mode').value})})});
-
-            discover().then(function(l){
-                var ex=CONFIG.exclude.map(function(s){return s.toLowerCase()});
-                l=l.filter(function(b){
-                    var low=b.path.toLowerCase();
-                    if(ex.indexOf(low)>-1)return false;
-                    if(CONFIG.folder&&low.indexOf(CONFIG.folder.toLowerCase().replace(/\/$/,'')+'/')!==0)return false;
-                    return true;
-                });
-                var cached=store('lib:titles')||{};
-                books=l.map(function(b){b._fixed=!!b.title;b.title=b.title||cached[b.path]||fallbackTitle(b.path);return b});
-                if(!books.length)return message('No encontré archivos .html en el repositorio.<br>Sube tus HTML y recarga.');
-
-                var folders={};books.forEach(function(b){folders[folderOf(b.path)]=1});
-                var fk=Object.keys(folders).sort();
-                if(fk.length>1){
-                    var sel=$('folder');sel.innerHTML='<option value="">Todas las carpetas</option>';
-                    fk.forEach(function(f){var o=document.createElement('option');o.value=f;o.textContent=f||'General';sel.appendChild(o)});
-                    $('folderWrap').style.display='block';
-                }
-                build();render();route();
-
-                var pend=books.filter(function(x){return !x._fixed&&!cached[x.path]}).length;
-                books.forEach(function(b){
-                    if(b._fixed||cached[b.path])return;
-                    titleFor(b).then(function(t){
-                        if(t)b.title=t;
-                        pend--;render();
-                    });
-                });
-            }).catch(function(e){
-                if(e.message==='rate')message('GitHub limitó las consultas por un rato. Prueba en unos minutos, o crea un archivo <code>books.json</code> con la lista de tus HTML.');
-                else message('No pude detectar el repositorio automáticamente.<br>Completa <code>CONFIG</code> al inicio de <code>index.html</code> (usuario y repo), o crea un <code>books.json</code>.');
-            });
-        })();
-    </script>
+    var sc0=store('lib:stats')||{},qd=[];
+    books.forEach(function(b){if(sc0[b.path])b.stats=sc0[b.path];else qd.push(b)});
+    render();
+    var k=0;qd.forEach(function(b){loadMeta(b).then(function(){if(++k%4===0||k===qd.length)render()})});
+  }).catch(function(e){
+    if(e.message==='rate')message('GitHub limitó las consultas por un rato. Prueba en unos minutos, o crea un archivo <code>books.json</code> con la lista de tus HTML.');
+    else message('No pude detectar el repositorio automáticamente.<br>Completa <code>CONFIG</code> al inicio de <code>index.html</code> (usuario y repo), o crea un <code>books.json</code>.');
+  });
+})();
+</script>
 </body>
 </html>
