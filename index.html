@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi biblioteca</title>
+<style>
+:root{--ink:#111;--paper:#fff;--soft:#f3f3f3;--accent:#e4572e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Courier New',Courier,ui-monospace,monospace;font-size:16px;line-height:1.4;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  background-image:radial-gradient(#d9d9d9 1px,transparent 1px);background-size:14px 14px}
+button,input,a{font:inherit;color:inherit}
+#lib{padding:16px 14px 56px;max-width:1000px;margin:0 auto}
+#lib.off{display:none}
+.win{background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);margin-bottom:22px}
+.tbar{display:flex;align-items:center;gap:10px;padding:6px 10px;border-bottom:2px solid var(--ink);background:repeating-linear-gradient(var(--ink) 0 1px,var(--paper) 1px 4px)}
+.tbar .ttl{margin:0 auto;background:var(--paper);padding:0 12px;font-size:17px;font-weight:bold;letter-spacing:.08em;text-transform:uppercase}
+.tbar .box{width:16px;height:16px;border:2px solid var(--ink);background:var(--paper)}
+.wbody{padding:14px}
+.sub{margin:0 0 12px;font-size:14px}
+.bar{display:flex;gap:10px}
+.bar input{flex:1;min-width:0;height:44px;padding:0 12px;border:2px solid var(--ink);border-radius:0;background:var(--paper);outline:none}
+.bar input:focus{box-shadow:3px 3px 0 var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border:2px solid var(--ink);border-radius:0;background:var(--paper);box-shadow:3px 3px 0 var(--ink);cursor:pointer;white-space:nowrap;text-decoration:none;font-weight:bold}
+.btn:hover{background:var(--soft)}
+.btn:active{transform:translate(3px,3px);box-shadow:none}
+h2{display:inline-block;margin:26px 0 14px;padding:3px 10px;font-size:14px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px}
+.book{display:flex;flex-direction:column;justify-content:space-between;aspect-ratio:3/4;padding:0;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);text-decoration:none;color:var(--ink);overflow:hidden;transition:transform .08s,box-shadow .08s}
+.book:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.book:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+.book:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.book .t{flex:1;padding:12px 10px;font-size:16px;line-height:1.2;font-weight:bold;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;border-bottom:2px solid var(--ink)}
+.book .d{background:var(--paper);padding:6px 8px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
+.msg{padding:36px 16px;border:2px dashed var(--ink);background:var(--paper);text-align:center}
+code{background:var(--soft);border:1px solid var(--ink);padding:0 4px}
+#reader{display:none;flex-direction:column;height:100%;background:var(--paper)}
+#reader.on{display:flex}
+.rb{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-bottom:2px solid var(--ink)}
+.rb .name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;font-size:14px}
+iframe{flex:1;width:100%;border:0;background:#fff}
+@media (max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:14px}.tbar .ttl{font-size:15px}.rb .btn{padding:0 10px}}
+</style>
+</head>
+<body>
+<div id="lib">
+  <div class="win">
+    <div class="tbar"><span class="box"></span><span class="ttl">Mi biblioteca</span><span class="box"></span></div>
+    <div class="wbody">
+      <p class="sub" id="count">Cargando…</p>
+      <div class="bar">
+        <input type="search" id="q" placeholder="Buscar libro…" aria-label="Buscar">
+      </div>
+    </div>
+  </div>
+  <div id="shelves"></div>
+</div>
+<div id="reader">
+  <div class="rb">
+    <button class="btn" id="back">◀ Volver</button>
+    <span class="name" id="rname"></span>
+    <a class="btn" id="open" target="_blank" rel="noopener" style="text-decoration:none" title="Abrir en pestaña nueva">↗</a>
+  </div>
+  <iframe id="frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"></iframe>
+</div>
+
+<script>
+/* ===== CONFIGURACIÓN (opcional) =====
+   Normalmente se detecta sola desde la URL (usuario.github.io/repo/).
+   Si usas dominio propio, completa estos datos: */
+var CONFIG = {
+  user: '',      // ej: 'juanperez'
+  repo: '',      // ej: 'mis-libros'
+  folder: '',    // ej: 'libros' si los HTML están en una subcarpeta (vacío = todo el repo)
+  exclude: ['index.html','404.html']
+};
+
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var books=[];
+  var BASE=location.pathname.replace(/[^\/]*$/,'');   // carpeta donde vive esta página
+
+  function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+
+  /* ---- descubrir repo ---- */
+  function candidates(){
+    if(CONFIG.user&&CONFIG.repo)return [{u:CONFIG.user,r:CONFIG.repo,prefix:''}];
+    var h=location.hostname,m=h.match(/^(.+)\.github\.io$/);
+    if(!m)return [];
+    var u=m[1],seg=location.pathname.split('/').filter(Boolean)[0];
+    var c=[];
+    if(seg&&!/\.html?$/i.test(seg))c.push({u:u,r:seg});
+    c.push({u:u,r:u+'.github.io'});
+    return c;
+  }
+  function listFromApi(){
+    var cs=candidates();
+    if(CONFIG.user&&CONFIG.repo)cs=[{u:CONFIG.user,r:CONFIG.repo}];
+    var i=0;
+    function next(){
+      if(i>=cs.length)return Promise.reject(new Error('norepo'));
+      var c=cs[i++];
+      return fetch('https://api.github.com/repos/'+c.u+'/'+c.r+'/git/trees/HEAD?recursive=1')
+        .then(function(r){if(r.status===403)throw new Error('rate');if(!r.ok)return next();return r.json()})
+        .then(function(j){
+          if(!j||!j.tree)return j;
+          var isProject=c.r.toLowerCase()!==(c.u+'.github.io').toLowerCase();
+          var root=isProject?'/'+c.r+'/':'/';
+          if(CONFIG.user&&CONFIG.repo)root=BASE;
+          return j.tree.filter(function(n){return n.type==='blob'&&/\.html?$/i.test(n.path)})
+            .map(function(n){return {path:n.path,href:root+n.path.split('/').map(encodeURIComponent).join('/'),size:n.size||0}});
+        });
+    }
+    return next();
+  }
+  function listFromJson(){
+    return fetch('books.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('nojson');return r.json()})
+      .then(function(a){return a.map(function(b){
+        var f=typeof b==='string'?b:b.file;
+        return {path:f,href:BASE+f.split('/').map(encodeURIComponent).join('/'),title:b.title||null,size:0};
+      })});
+  }
+  function discover(){
+    var cache=store('lib:list');
+    if(cache&&Date.now()-cache.t<10*60*1000)return Promise.resolve(cache.l);
+    return listFromJson().catch(function(){return listFromApi()}).then(function(l){
+      store('lib:list',{t:Date.now(),l:l});return l;
+    }).catch(function(e){
+      if(cache)return cache.l;throw e;
+    });
+  }
+
+  /* ---- títulos ---- */
+  function titleFor(b){
+    if(b.title)return Promise.resolve(b.title);
+    var tc=store('lib:titles')||{};
+    if(tc[b.path])return Promise.resolve(tc[b.path]);
+    return fetch(b.href).then(function(r){return r.text()}).then(function(h){
+      var m=h.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      var t=(m&&m[1].replace(/\s+/g,' ').trim())||'';
+      var tc2=store('lib:titles')||{};tc2[b.path]=t;store('lib:titles',tc2);return t;
+    }).catch(function(){return ''});
+  }
+  function fallbackTitle(p){return p.split('/').pop().replace(/\.html?$/i,'').replace(/[-_]+/g,' ')}
+  function color(s){var P=['#ffd23f','#ff8c69','#7bdff2','#b2f7b8','#f7a8d8','#c9b6ff','#ffb347','#9be3a1'];var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return P[h%P.length]}
+
+  /* ---- render ---- */
+  function render(){
+    var q=$('q').value.trim().toLowerCase(),box=$('shelves');box.innerHTML='';
+    var list=books.filter(function(b){return !q||b.title.toLowerCase().indexOf(q)>-1||b.path.toLowerCase().indexOf(q)>-1});
+    $('count').textContent=books.length+(books.length===1?' libro':' libros');
+    if(!list.length){box.innerHTML='<div class="msg">Sin resultados.</div>';return}
+    var groups={};
+    list.forEach(function(b){var i=b.path.lastIndexOf('/');var g=i>-1?b.path.slice(0,i):'';(groups[g]=groups[g]||[]).push(b)});
+    Object.keys(groups).sort().forEach(function(g){
+      if(Object.keys(groups).length>1||g){var h=document.createElement('h2');h.textContent=g||'General';box.appendChild(h)}
+      var grid=document.createElement('div');grid.className='grid';
+      groups[g].sort(function(a,b){return a.title.localeCompare(b.title,'es')}).forEach(function(b){
+        var a=document.createElement('a');a.className='book';a.href='#'+encodeURIComponent(b.path);a.style.background=color(b.path);
+        var t=document.createElement('div');t.className='t';t.textContent=b.title;
+        var d=document.createElement('div');d.className='d';d.textContent=b.path.split('/').pop();
+        a.appendChild(t);a.appendChild(d);grid.appendChild(a);
+      });
+      box.appendChild(grid);
+    });
+  }
+  function message(html){$('count').textContent='';$('shelves').innerHTML='<div class="msg">'+html+'</div>'}
+
+  /* ---- lector (con #hash para poder recargar/compartir/usar “atrás”) ---- */
+  function route(){
+    var p=decodeURIComponent(location.hash.slice(1));
+    var b=p&&books.filter(function(x){return x.path===p})[0];
+    if(b){
+      $('rname').textContent=b.title;
+      if($('frame').getAttribute('src')!==b.href)$('frame').src=b.href;
+      $('open').href=b.href;
+      $('lib').classList.add('off');$('reader').classList.add('on');
+      document.title=b.title;
+    }else{
+      $('reader').classList.remove('on');$('lib').classList.remove('off');
+      $('frame').removeAttribute('src');document.title='Mi biblioteca';
+    }
+  }
+  $('back').onclick=function(){if(history.length>1&&location.hash)history.back();else location.hash=''};
+  window.addEventListener('hashchange',route);
+  $('q').oninput=render;
+
+  /* ---- arranque ---- */
+  discover().then(function(l){
+    var ex=CONFIG.exclude.map(function(s){return s.toLowerCase()});
+    l=l.filter(function(b){
+      var low=b.path.toLowerCase();
+      if(ex.indexOf(low.split('/').pop())>-1&&low.indexOf('/')<0)return false;
+      if(CONFIG.folder&&low.indexOf(CONFIG.folder.toLowerCase().replace(/\/$/,'')+'/')!==0)return false;
+      return true;
+    });
+    books=l.map(function(b){b._fixed=!!b.title;b.title=b.title||fallbackTitle(b.path);return b});
+    if(!books.length)return message('No encontré archivos .html en el repositorio.<br>Sube tus HTML y recarga.');
+    render();route();
+    // refinar títulos con el <title> real de cada archivo
+    var pend=l.filter(function(x){return !x._fixed}).length;
+    l.forEach(function(raw,i){
+      if(raw._fixed){return}
+      titleFor({path:raw.path,href:raw.href,title:null}).then(function(t){
+        if(t){books[i].title=t}
+        if(--pend===0||pend%8===0){render()}
+      });
+    });
+  }).catch(function(e){
+    if(e.message==='rate')message('GitHub limitó las consultas por un rato. Prueba en unos minutos, o crea un archivo <code>books.json</code> (ver instrucciones).');
+    else message('No pude detectar el repositorio automáticamente.<br>Completa <code>CONFIG</code> al inicio de <code>index.html</code> (usuario y repo), o crea un <code>books.json</code>.');
+  });
+})();
+</script>
+</body>
+</html>
