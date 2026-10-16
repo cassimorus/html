@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculadora retro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --page:#ffffff; --body:#d8d2c2; --body-edge:#b9b2a0; --ink:#2b2a27;
+  --key:#f3efe4; --key-edge:#bdb6a3; --dark:#3a3835; --dark-edge:#1f1e1c;
+  --orange:#e4571b; --orange-edge:#a33a0c; --red:#c8402f; --red-edge:#8a2517;
+  --lcd:#b8c79b; --lcd-ink:#2a3320;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;background:var(--page);color:var(--ink);
+  font-family:"Space Grotesk",system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:center;padding:24px 16px;
+}
+.calc{
+  width:100%;max-width:340px;background:var(--body);border-radius:22px 22px 30px 30px;
+  padding:18px 18px 24px;
+  box-shadow:0 1px 0 #fff inset,0 -6px 0 var(--body-edge) inset,0 18px 0 -6px #cfc9b9,0 26px 30px -10px rgba(0,0,0,.28);
+  border:2px solid var(--body-edge);
+}
+.brand{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand b{font-size:15px;letter-spacing:.04em;font-weight:700}
+.solar{display:flex;gap:2px;width:84px;height:22px;padding:3px;background:#2a2926;border-radius:4px;box-shadow:0 1px 0 #fff}
+.solar i{flex:1;background:linear-gradient(#5a4a3a,#3a2f26);border-radius:1px}
+.lcd{
+  background:var(--lcd);border-radius:8px;padding:8px 12px 6px;margin-bottom:18px;
+  box-shadow:0 3px 8px rgba(0,0,0,.35) inset,0 1px 0 #fff;border:2px solid #8f9b78;
+  color:var(--lcd-ink);text-align:right;overflow:hidden;
+}
+.expr{font-family:"VT323",ui-monospace,monospace;font-size:20px;height:22px;opacity:.65;white-space:nowrap;overflow:hidden}
+.out{font-family:"VT323",ui-monospace,monospace;font-size:56px;line-height:1;height:56px;white-space:nowrap;text-shadow:2px 2px 0 rgba(42,51,32,.18)}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+button{
+  font:700 22px "Space Grotesk",system-ui,sans-serif;height:56px;border:0;border-radius:10px;cursor:pointer;
+  background:var(--key);color:var(--ink);
+  box-shadow:0 5px 0 var(--key-edge),0 6px 6px rgba(0,0,0,.25);
+  transition:transform .06s,box-shadow .06s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+button:active,button.press{transform:translateY(4px);box-shadow:0 1px 0 var(--key-edge),0 2px 3px rgba(0,0,0,.25)}
+button:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.op{background:var(--dark);color:#f3efe4;box-shadow:0 5px 0 var(--dark-edge),0 6px 6px rgba(0,0,0,.3)}
+.op:active,.op.press{box-shadow:0 1px 0 var(--dark-edge),0 2px 3px rgba(0,0,0,.3)}
+.clr{background:var(--red);color:#fff;box-shadow:0 5px 0 var(--red-edge),0 6px 6px rgba(0,0,0,.3)}
+.clr:active,.clr.press{box-shadow:0 1px 0 var(--red-edge),0 2px 3px rgba(0,0,0,.3)}
+.eq{background:var(--orange);color:#fff;grid-row:span 2;height:auto;box-shadow:0 5px 0 var(--orange-edge),0 6px 6px rgba(0,0,0,.3)}
+.eq:active,.eq.press{box-shadow:0 1px 0 var(--orange-edge),0 2px 3px rgba(0,0,0,.3)}
+.zero{grid-column:span 2}
+@media (prefers-reduced-motion:reduce){button{transition:none}}
+</style>
+</head>
+<body>
+<main class="calc" aria-label="Calculadora">
+  <div class="brand"><b>Electrónica 77</b><div class="solar" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+  <div class="lcd" role="status" aria-live="polite">
+    <div class="expr" id="expr">&nbsp;</div>
+    <div class="out" id="out">0</div>
+  </div>
+  <div class="keys">
+    <button class="clr" data-k="C">C</button>
+    <button class="op" data-k="back" aria-label="Borrar">⌫</button>
+    <button class="op" data-k="%">%</button>
+    <button class="op" data-k="/">÷</button>
+
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button class="op" data-k="*">×</button>
+
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button class="op" data-k="-">−</button>
+
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button class="op" data-k="+">+</button>
+
+    <button data-k="neg">±</button><button data-k="0">0</button><button data-k=".">,</button>
+    <button class="eq" data-k="=" style="grid-column:4;grid-row:5 / span 1;height:56px">=</button>
+  </div>
+</main>
+<script>
+(function(){
+  var out=document.getElementById('out'), expr=document.getElementById('expr');
+  var cur='0', acc=null, op=null, fresh=false, sym={'+':'+','-':'−','*':'×','/':'÷'};
+
+  function fmt(s){
+    var neg=s[0]==='-', t=neg?s.slice(1):s, p=t.split('.');
+    return (neg?'-':'')+p[0]+(p.length>1?','+p[1]:'');
+  }
+  function show(){
+    var t=fmt(cur);
+    out.textContent=t.length>11?Number(cur).toExponential(4).replace('.',','):t;
+    expr.innerHTML=acc!==null&&op?fmt(String(acc))+' '+sym[op]:'&nbsp;';
+  }
+  function calc(a,b,o){
+    var r=o==='+'?a+b:o==='-'?a-b:o==='*'?a*b:b===0?NaN:a/b;
+    return isFinite(r)?String(parseFloat(r.toPrecision(12))):'Error';
+  }
+  function digit(d){
+    if(cur==='Error'||fresh){cur='0';fresh=false}
+    if(cur.replace(/[-.]/g,'').length>=11)return;
+    cur=cur==='0'?d:cur==='-0'?'-'+d:cur+d;
+  }
+  function operate(o){
+    if(cur==='Error')return;
+    if(op&&!fresh){cur=calc(acc,parseFloat(cur),op);if(cur==='Error'){acc=null;op=null;return}}
+    acc=parseFloat(cur);op=o;fresh=true;
+  }
+  function press(k){
+    if(k>='0'&&k<='9')digit(k);
+    else if(k==='.'){if(cur==='Error'||fresh){cur='0';fresh=false}if(cur.indexOf('.')<0)cur+='.'}
+    else if('+-*/'.indexOf(k)>-1)operate(k);
+    else if(k==='='){
+      if(op&&cur!=='Error'){cur=calc(acc,parseFloat(cur),op);acc=null;op=null;fresh=true}
+    }
+    else if(k==='C'){cur='0';acc=null;op=null;fresh=false}
+    else if(k==='back'){if(cur==='Error'||fresh){cur='0';fresh=false}else cur=cur.length>1&&!(cur.length===2&&cur[0]==='-')?cur.slice(0,-1):'0'}
+    else if(k==='neg'){if(cur!=='Error'&&cur!=='0')cur=cur[0]==='-'?cur.slice(1):'-'+cur}
+    else if(k==='%'){if(cur!=='Error'){cur=String(parseFloat((parseFloat(cur)/100).toPrecision(12)));fresh=false}}
+    show();
+  }
+  document.querySelector('.keys').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(b)press(b.dataset.k);
+  });
+  document.addEventListener('keydown',function(e){
+    var k=e.key,map={Enter:'=','=':'=',Escape:'C',Backspace:'back',',':'.','.':'.','%':'%'};
+    if(map[k])k=map[k];
+    if(!/^([0-9.+\-*\/=%]|C|back)$/.test(k))return;
+    e.preventDefault();
+    var b=document.querySelector('[data-k="'+k+'"]');
+    if(b){b.classList.add('press');setTimeout(function(){b.classList.remove('press')},110)}
+    press(k);
+  });
+  show();
+})();
+</script>
+</body>
+</html>
