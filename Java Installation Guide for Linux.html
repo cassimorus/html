@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalación de Java en Linux</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between selection:bg-indigo-500 selection:text-white font-sans antialiased">
+
+    <!-- Background glow effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 py-12 w-full flex-grow flex flex-col justify-center">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold tracking-wide uppercase mb-4">
+                <i class="fa-brands fa-linux"></i> Linux Package Reference
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
+                Instalación de <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Java SDK</span>
+            </h1>
+            <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto">
+                Selecciona tu distribución de Linux preferida y copia el comando exacto para configurar tu entorno de desarrollo en segundos.
+            </p>
+        </header>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            
+            <!-- Debian / Ubuntu Card -->
+            <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-500/50 transition-all duration-300 shadow-xl group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-debian"></i>
+                        </div>
+                        <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">APT Manager</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-1">Debian / Ubuntu</h2>
+                    <p class="text-slate-400 text-sm mb-6">Basado en sistemas de paquetes .deb y repositorios oficiales.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Comando de instalación</label>
+                    <div class="relative bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between group-hover:border-slate-700 transition-colors">
+                        <code id="cmd-debian" class="text-sm font-mono text-cyan-300 select-all overflow-x-auto whitespace-nowrap pr-2">sudo apt install default-jdk</code>
+                        <button onclick="copyCommand('cmd-debian', 'btn-debian')" id="btn-debian" class="shrink-0 bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Copiar al portapapeles">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arch Linux Card -->
+            <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-500/50 transition-all duration-300 shadow-xl group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-linux"></i>
+                        </div>
+                        <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Pacman</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-1">Arch Linux</h2>
+                    <p class="text-slate-400 text-sm mb-6">Sistema rolling release enfocado en paquetes contemporáneos.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Comando de instalación</label>
+                    <div class="relative bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between group-hover:border-slate-700 transition-colors">
+                        <code id="cmd-arch" class="text-sm font-mono text-cyan-300 select-all overflow-x-auto whitespace-nowrap pr-2">sudo pacman -S jdk-openjdk</code>
+                        <button onclick="copyCommand('cmd-arch', 'btn-arch')" id="btn-arch" class="shrink-0 bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Copiar al portapapeles">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fedora Card -->
+            <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-500/50 transition-all duration-300 shadow-xl group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-feather"></i>
+                        </div>
+                        <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">DNF Manager</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-white mb-1">Fedora</h2>
+                    <p class="text-slate-400 text-sm mb-6">Distribución moderna impulsada por Red Hat orientada a innovación.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Comando de instalación</label>
+                    <div class="relative bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between group-hover:border-slate-700 transition-colors">
+                        <code id="cmd-fedora" class="text-sm font-mono text-cyan-300 select-all overflow-x-auto whitespace-nowrap pr-2">sudo dnf install java-latest-openjdk-devel.x86_64</code>
+                        <button onclick="copyCommand('cmd-fedora', 'btn-fedora')" id="btn-fedora" class="shrink-0 bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Copiar al portapapeles">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-6 border-t border-slate-900 text-center text-slate-500 text-sm">
+        <p>Guía rápida de instalación de Java para distribuciones GNU/Linux.</p>
+    </footer>
+
+    <!-- Notification Toast Element -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-indigo-500/30 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <p class="text-xs font-semibold text-slate-200">¡Copiado con éxito!</p>
+            <p id="toast-msg" class="text-xs text-slate-400">Comando copiado al portapapeles.</p>
+        </div>
+    </div>
+
+    <!-- Script to Handle Copy to Clipboard -->
+    <script>
+        function copyCommand(elementId, buttonId) {
+            const codeText = document.getElementById(elementId).innerText;
+            const button = document.getElementById(buttonId);
+
+            // Fallback compatible copy mechanism using document.execCommand
+            const textArea = document.createElement("textarea");
+            textArea.value = codeText;
+            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast();
+                    
+                    // Visual state update on button
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i>';
+                    button.classList.add('bg-indigo-600/20', 'border', 'border-indigo-500/40');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('bg-indigo-600/20', 'border', 'border-indigo-500/40');
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Error al intentar copiar el texto: ', err);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
