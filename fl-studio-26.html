@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Descargar FL Studio 26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bricolage+Grotesque:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #17121f;
+    --panel: #221a2f;
+    --line: #3a2d4d;
+    --text: #f3eefa;
+    --muted: #a99bbf;
+    --orange: #ff8a1f;
+    --step-off: #2e2340;
+    --step-on: #ff8a1f;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { color-scheme: dark; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+  main { max-width: 960px; margin: 0 auto; padding: 56px 24px 72px; }
+
+  h1 {
+    font-family: "Bricolage Grotesque", "Space Grotesk", sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.6rem, 8vw, 5.2rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .lead { color: var(--muted); max-width: 46ch; margin-top: 18px; font-size: 1.1rem; }
+
+  /* Step sequencer: the one memorable element */
+  .seq {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    gap: 6px;
+    margin: 44px 0 36px;
+  }
+  .seq button {
+    aspect-ratio: 1 / 1.25;
+    border: 0;
+    border-radius: 4px;
+    background: var(--step-off);
+    cursor: pointer;
+    transition: background .12s, transform .12s;
+  }
+  .seq button:nth-child(4n+1) { background: #3a2d4d; }
+  .seq button.on { background: var(--step-on); }
+  .seq button.play { transform: translateY(-6px); box-shadow: 0 0 0 2px var(--text) inset; }
+  .seq button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+  .download {
+    display: inline-block;
+    background: var(--orange);
+    color: #1a0f00;
+    font-weight: 700;
+    font-size: 1.15rem;
+    padding: 18px 34px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform .15s, filter .15s;
+  }
+  .download:hover { filter: brightness(1.08); transform: translateY(-2px); }
+  .download:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+  .meta { color: var(--muted); font-size: .95rem; }
+
+  .info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 40px;
+    margin-top: 72px;
+    padding-top: 36px;
+    border-top: 1px solid var(--line);
+  }
+  h2 { font-size: 1.1rem; margin-bottom: 12px; }
+  .info ul { padding-left: 1.1em; color: var(--muted); }
+  .info li { margin-bottom: 6px; }
+  .info li::marker { color: var(--orange); }
+
+  footer { margin-top: 56px; color: var(--muted); font-size: .85rem; max-width: 70ch; }
+
+  @media (max-width: 560px) {
+    .seq { grid-template-columns: repeat(8, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>FL Studio 26</h1>
+  <p class="lead">Compón, graba, mezcla y masteriza tu música en un solo programa. Descárgalo e instálalo en minutos.</p>
+
+  <div class="seq" id="seq" role="group" aria-label="Secuenciador de pasos: haz clic para activar o desactivar pasos"></div>
+
+  <div class="cta-row">
+    <!-- REEMPLAZA el valor de href por tu enlace de descarga -->
+    <a class="download" id="downloadBtn" href="#" rel="noopener">Descargar FL Studio 26</a>
+    <span class="meta">Para Windows</span>
+  </div>
+
+  <section class="info">
+    <div>
+      <h2>Qué incluye</h2>
+      <ul>
+        <li>Piano roll y secuenciador de patrones</li>
+        <li>Mezclador con efectos integrados</li>
+        <li>Instrumentos y plugins incluidos</li>
+        <li>Soporte para VST y grabación de audio</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Cómo instalarlo</h2>
+      <ul>
+        <li>Haz clic en el botón de descarga.</li>
+        <li>Abre el instalador descargado.</li>
+        <li>Sigue los pasos del asistente.</li>
+        <li>Abre FL Studio y empieza a crear.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    FL Studio es una marca registrada de Image-Line. Esta página es una guía de descarga no oficial.
+  </footer>
+</main>
+
+<script>
+  // Secuenciador decorativo: patrón inicial y reproducción en bucle
+  const seq = document.getElementById('seq');
+  const pattern = [1,0,0,0, 1,0,1,0, 0,0,1,0, 1,0,0,1];
+  const steps = pattern.map((on, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Paso ' + (i + 1));
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) b.classList.add('on');
+    b.addEventListener('click', () => {
+      const active = b.classList.toggle('on');
+      b.setAttribute('aria-pressed', active);
+    });
+    seq.appendChild(b);
+    return b;
+  });
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) {
+    let n = 0;
+    setInterval(() => {
+      steps.forEach(s => s.classList.remove('play'));
+      steps[n % steps.length].classList.add('play');
+      n++;
+    }, 220);
+  }
+</script>
+</body>
+</html>
